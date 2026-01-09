@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-pt">
 <head>
     <meta charset="UTF-8">
@@ -9,26 +9,172 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
         :root { --blue: #3081f1; --dark-blue: #1a4fa0; --card: rgba(22, 27, 34, 0.98); --green: #25d366; --red: #ff4444; }
-        body { font-family: 'Segoe UI', sans-serif; color: white; margin: 0; background: #0d1117; padding-bottom: 100px; overflow-x: hidden; }
-        .overlay-global { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), url('https://images8.alphacoders.com/105/1052862.jpg'); background-size: cover; z-index: -1; }
+        
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            color: white; 
+            margin: 0; 
+            background: #000; 
+            padding-bottom: 150px; 
+            overflow-x: hidden; 
+            position: relative; 
+        }
+        
+        body::before { 
+            content: "YANIKZX9 STORE"; 
+            position: fixed; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%) rotate(-30deg); 
+            font-size: 10vw; color: rgba(255,255,255,0.02); 
+            font-weight: bold; z-index: -1; white-space: nowrap; pointer-events: none; 
+        }
+
+        .overlay-global { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.95)), url('https://images8.alphacoders.com/105/1052862.jpg'); 
+            background-size: cover; z-index: -2; 
+        }
+
         .container { padding: 15px; max-width: 500px; margin: auto; }
-        .box { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid var(--blue); text-align: center; }
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; font-size: 16px; }
-        .btn { width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; margin-top: 10px; width: 100%; }
-        .catalog-card { width: 100%; height: 100px; border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: linear-gradient(135deg, var(--dark-blue) 0%, var(--blue) 100%); border: 2px solid rgba(255,255,255,0.2); }
-        .item { background: rgba(33, 38, 45, 0.9); border: 1px solid rgba(48, 129, 241, 0.3); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        #cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #161b22; border-top: 3px solid var(--blue); padding: 20px; display: none; justify-content: space-between; align-items: center; z-index: 4000; box-sizing: border-box; }
-        #payment-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 400px; background: #0d1117; border: 2px solid var(--green); border-radius: 20px; padding: 20px; z-index: 6000; }
+        
+        .main-logo { 
+            font-family: 'Arial Black', sans-serif; font-size: 28px; 
+            color: var(--blue); text-shadow: 0 0 15px rgba(48, 129, 241, 0.5); 
+            margin-bottom: 20px; text-align: center; 
+        }
+
+        .btn, .header-btn, .catalog-card, .item { 
+            border: 2px solid var(--green) !important; 
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        .catalog-card {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--dark-blue) 0%, var(--blue) 100%);
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .catalog-card div { font-size: 24px; margin-bottom: 5px; }
+
+        .info-next-update {
+            background: rgba(37, 211, 102, 0.1);
+            border-left: 4px solid var(--green);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            color: var(--green);
+            font-size: 13px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .floating-support {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 15px;
+            z-index: 3000;
+        }
+
+        .float-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .float-label {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            border: 1px solid var(--green);
+            white-space: nowrap;
+        }
+
+        .float-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border: 2px solid var(--green);
+            transition: 0.3s;
+        }
+        
+        .btn-wa { background: #25d366; }
+        .btn-gp { background: var(--blue); }
+
+        .header-btn { width: 100%; background: var(--blue); color: white; padding: 15px; border-radius: 12px; font-weight: bold; margin-bottom: 15px; cursor: pointer; border: none; }
+        .box { background: var(--card); padding: 30px 20px; border-radius: 20px; border: 2px solid var(--blue); text-align: center; }
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; font-size: 16px; outline: none; }
+        .btn { width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; border: none; }
+        .item { background: rgba(33, 38, 45, 0.9); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 400px; background: #0d1117; border: 2px solid var(--green); border-radius: 20px; padding: 25px; z-index: 6000; box-shadow: 0 0 30px rgba(37, 211, 102, 0.2); }
         #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 5500; }
+        
+        .transfer-highlight { 
+            display: block; 
+            background: rgba(37, 211, 102, 0.15); 
+            border: 2px dashed var(--green); 
+            color: var(--green); 
+            font-size: 24px; 
+            font-weight: bold; 
+            padding: 12px; 
+            margin: 15px 0; 
+            border-radius: 10px; 
+            text-align: center; 
+        }
+
+        #cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #161b22; border-top: 3px solid var(--green); padding: 15px; display: none; flex-direction: column; z-index: 4000; box-sizing: border-box; }
     </style>
 </head>
 <body>
     <div class="overlay-global"></div>
+    
+    <div id="floating-menu" class="floating-support" style="display: none;">
+        <a href="https://wa.me/258840474014" target="_blank" class="float-item">
+            <span class="float-label">Atendimento ao Cliente</span>
+            <div class="float-btn btn-wa">🎧</div>
+        </a>
+        <a href="https://chat.whatsapp.com/LZTcrcTxJCL6lXhTNV9lcd" target="_blank" class="float-item">
+            <span class="float-label">Grupo do Site</span>
+            <div class="float-btn btn-gp">👥</div>
+        </a>
+    </div>
+
     <div class="container">
         <div id="auth-screen">
             <div class="box">
-                <img src="https://i.ibb.co/XrnM3hB/logo-yanikzx9.jpg" style="width:80px; border-radius:50%; margin-bottom:15px;">
-                <h2 style="color: var(--blue); margin:0;">YANIKZX9 STORE</h2>
+                <div class="main-logo">YANIKZX9 STORE</div>
                 <input type="email" id="email" placeholder="E-mail">
                 <input type="password" id="pass" placeholder="Senha">
                 <button class="btn" style="background: var(--blue); color:white;" onclick="entrar()">ENTRAR</button>
@@ -37,35 +183,66 @@
         </div>
 
         <div id="menu-screen" style="display: none;">
-            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <span id="user-display" style="font-size: 12px;"></span>
-                <button onclick="location.reload()" style="background:var(--red); border:none; color:white; padding: 5px 10px; border-radius: 5px;">SAIR</button>
+            <div class="main-logo" style="font-size: 20px;">MENU PRINCIPAL</div>
+            <button class="header-btn" onclick="mostrarAjuda()">❓ COMO RECARREGAR?</button>
+            
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <span id="user-display" style="font-size: 10px; color: var(--blue);"></span>
+                <button onclick="location.reload()" style="background:var(--red); border:none; color:white; padding: 5px 12px; border-radius: 8px; font-weight: bold; font-size: 10px;">SAIR</button>
             </div>
-            <div class="catalog-card" onclick="abrirCategoria('bonus')"><h3>🎁 BÔNUS (+)</h3></div>
-            <div class="catalog-card" onclick="abrirCategoria('padrao')"><h3>🛡️ PADRÃO</h3></div>
-            <div class="catalog-card" onclick="abrirCategoria('assinaturas')"><h3>🆔 ASSINATURAS</h3></div>
+
+            <div class="menu-grid">
+                <div class="catalog-card" onclick="abrirCategoria('bonus')"><div>🎁</div><span>BÔNUS</span></div>
+                <div class="catalog-card" onclick="abrirCategoria('padrao')"><div>🛡️</div><span>PADRÃO</span></div>
+                <div class="catalog-card" onclick="abrirCategoria('assinaturas')"><div>🆔</div><span>ASSINAR</span></div>
+            </div>
+
+            <div class="info-next-update">
+                ⚠️ <b>AVISO:</b> Brevemente teremos mais opções de compra em mais jogos como (Pubg, Roblox e Blood strike) na próxima atualização que é na sexta feira. Faça parte do grupo clicando no segundo botão dos botões flutuantes.
+            </div>
         </div>
 
         <div id="products-screen" style="display: none;">
-            <button class="btn" style="background: #30363d; color:white; margin-bottom:15px;" onclick="voltarMenu()">⬅ VOLTAR</button>
-            <h2 id="cat-title" style="text-align: center; color: var(--blue);"></h2>
+            <button class="btn" style="background: #30363d; color:white; margin-bottom:15px; border: 1px solid white !important;" onclick="voltar()">⬅ VOLTAR</button>
+            <h2 id="cat-title" style="text-align: center; color: var(--blue); font-size: 18px;"></h2>
             <div id="products-list"></div>
         </div>
     </div>
 
     <div id="modal-overlay"></div>
-    <div id="payment-modal">
-        <h3 style="color:var(--green); text-align:center;">M-PESA: 840474014</h3>
-        <p style="text-align:center;">Total: <span id="val-total"></span> MT</p>
-        <input type="number" id="p-id-ff" placeholder="ID Jogador FF">
-        <input type="text" id="p-id-trans" placeholder="ID Transação M-Pesa">
-        <button class="btn" style="background: var(--green); color:white;" onclick="finalizarPedido()">PAGAR AGORA ✅</button>
-        <button class="btn" style="background:none; color:var(--red);" onclick="fecharModal()">CANCELAR</button>
+    <div id="modal-ajuda" class="modal">
+        <h3 style="color:var(--green); text-align:center; margin-top:0;">COMO RECARREGAR?</h3>
+        <p style="font-size: 14px;">1. Primeiro, faça a transferência para:</p>
+        <div class="transfer-highlight">840474014</div>
+        <p style="font-size: 14px; line-height: 1.6;">
+            2. Escolha os seus itens <b>clicando no botão (+)</b> da oferta desejada e depois clique no botão <b>PAGAR</b> que aparecerá no fundo da tela.
+        </p>
+        <p style="font-size: 14px;">3. No formulário final, insira o seu <b>ID do Free Fire</b> e o <b>ID da Transação M-Pesa</b>.</p>
+        <button class="btn" style="background:var(--blue); color:white; margin-top:15px;" onclick="fecharModais()">ENTENDI!</button>
+    </div>
+
+    <div id="custom-alert" class="modal">
+        <h3 id="alert-title" style="text-align: center; color: var(--blue);">AVISO</h3>
+        <p id="alert-msg" style="text-align: center; margin: 20px 0;"></p>
+        <button class="btn" style="background: var(--blue); color:white;" onclick="fecharModais()">OK</button>
+    </div>
+
+    <div id="modal-pagamento" class="modal">
+        <h3 style="color:var(--green); text-align:center;">PAGAMENTO</h3>
+        <div class="transfer-highlight" style="font-size: 18px;">M-Pesa: 840474014</div>
+        <p style="text-align:center;">Total: <b id="val-total"></b> MT</p>
+        <input type="number" id="p-id-ff" placeholder="ID do Jogador Free Fire">
+        <input type="text" id="p-id-trans" placeholder="ID da Transação M-Pesa">
+        <button class="btn" style="background: var(--green); color:white;" onclick="finalizar()">CONFIRMAR ✅</button>
+        <button class="btn" style="background:none; color:var(--red);" onclick="fecharModais()">CANCELAR</button>
     </div>
 
     <div id="cart-bar">
-        <div>Total: <strong id="cart-total">0</strong> MT</div>
-        <button class="btn" style="background: var(--blue); color:white; width:auto; padding: 10px 20px;" onclick="abrirModal()">COMPRAR</button>
+        <div id="cart-items-list" style="margin-bottom: 10px; max-height: 80px; overflow-y: auto; font-size: 12px;"></div>
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+            <div>Total: <strong id="cart-total" style="color:var(--green); font-size: 18px;">0</strong> MT</div>
+            <button class="btn" style="background: var(--blue); color:white; width:auto; padding: 10px 20px; margin:0;" onclick="abrirPagamento()">PAGAR</button>
+        </div>
     </div>
 
     <script>
@@ -81,99 +258,80 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // TABELAS DE PREÇOS CONFORME AS TUAS IMAGENS
         const dados = {
-            bonus: [
-                {n:"100 + 10 Diamonds", p:80},
-                {n:"210 + 21 Diamonds", p:150},
-                {n:"530 + 53 Diamonds", p:350},
-                {n:"1080 + 108 Diamonds", p:700},
-                {n:"2200 + 220 Diamonds", p:1400}
-            ],
-            padrao: [
-                {n:"100 Diamonds", p:85},
-                {n:"210 Diamonds", p:155},
-                {n:"530 Diamonds", p:370},
-                {n:"1080 Diamonds", p:700},
-                {n:"2200 Diamonds", p:1500}
-            ],
-            assinaturas: [
-                {n:"Semanal", p:190}, 
-                {n:"Mensal", p:790}, 
-                {n:"Passe Booyah", p:250}
-            ]
+            bonus: [{n:"100+10 Diamonds", p:80}, {n:"210+21 Diamonds", p:150}, {n:"530+53 Diamonds", p:350}, {n:"1080+108 Diamonds", p:700}, {n:"2200+220 Diamonds", p:1400}],
+            padrao: [{n:"100 Diamonds", p:85}, {n:"210 Diamonds", p:155}, {n:"530 Diamonds", p:370}, {n:"1080 Diamonds", p:700}, {n:"2200 Diamonds", p:1500}],
+            assinaturas: [{n:"Semanal", p:190}, {n:"Mensal", p:790}, {n:"Passe Booyah", p:250}]
         };
 
         let carrinho = [];
 
+        function alertaBonito(titulo, msg) {
+            document.getElementById('alert-title').innerText = titulo;
+            document.getElementById('alert-msg').innerText = msg;
+            document.getElementById('custom-alert').style.display = 'block';
+            document.getElementById('modal-overlay').style.display = 'block';
+        }
+
         function entrar() {
             const e = document.getElementById('email').value;
             const s = document.getElementById('pass').value;
-            auth.signInWithEmailAndPassword(e, s)
-                .then(u => { 
-                    document.getElementById('auth-screen').style.display='none';
-                    document.getElementById('menu-screen').style.display='block';
-                    document.getElementById('user-display').innerText = "Logado: " + u.user.email;
-                })
-                .catch(err => alert("Erro: " + err.message));
+            if(!e || !s) return alertaBonito("ERRO", "Preencha tudo!");
+            auth.signInWithEmailAndPassword(e, s).then(u => { 
+                document.getElementById('auth-screen').style.display='none';
+                document.getElementById('menu-screen').style.display='block';
+                document.getElementById('floating-menu').style.display='flex';
+                document.getElementById('user-display').innerText = "CONTA: " + u.user.email;
+            }).catch(() => alertaBonito("ERRO", "Dados incorretos!"));
         }
 
         function cadastrar() {
             const e = document.getElementById('email').value;
             const s = document.getElementById('pass').value;
-            auth.createUserWithEmailAndPassword(e, s)
-                .then(() => alert("Conta criada! Clique em ENTRAR."))
-                .catch(err => alert("Erro: " + err.message));
+            if(s.length < 6) return alertaBonito("AVISO", "Senha mínima 6 dígitos.");
+            auth.createUserWithEmailAndPassword(e, s).then(() => alertaBonito("OK", "Conta criada!")).catch(err => alertaBonito("ERRO", err.message));
         }
 
         function abrirCategoria(c) {
             document.getElementById('menu-screen').style.display='none';
             document.getElementById('products-screen').style.display='block';
-            document.getElementById('cat-title').innerText = c === 'bonus' ? "OFERTAS BÔNUS (+)" : "OFERTAS PADRÃO";
+            document.getElementById('cat-title').innerText = c.toUpperCase();
             const l = document.getElementById('products-list'); l.innerHTML = "";
             dados[c].forEach(x => {
-                l.innerHTML += `<div class="item"><span>${x.n}</span><div><strong>${x.p} MT</strong> <button onclick="add('${x.n}',${x.p})" style="background:var(--blue); color:white; border:none; padding:8px 12px; border-radius:5px; margin-left:10px;">+</button></div></div>`;
+                l.innerHTML += `<div class="item"><span>${x.n}</span><div><strong>${x.p} MT</strong> <button onclick="add('${x.n}',${x.p})" style="background:var(--blue); color:white; border:1px solid var(--green) !important; padding:8px 12px; border-radius:5px; margin-left:10px;">+</button></div></div>`;
             });
         }
 
-        function voltarMenu() { 
-            document.getElementById('products-screen').style.display='none'; 
-            document.getElementById('menu-screen').style.display='block'; 
-        }
+        function voltar() { document.getElementById('products-screen').style.display='none'; document.getElementById('menu-screen').style.display='block'; }
+        function add(n,p) { carrinho.push({id: Date.now(), n, p}); atualizarCarrinho(); }
+        function remover(id) { carrinho = carrinho.filter(i => i.id !== id); atualizarCarrinho(); }
 
-        function add(n,p) { carrinho.push({n,p}); atualizar(); }
-        function atualizar() {
+        function atualizarCarrinho() {
+            const list = document.getElementById('cart-items-list');
+            list.innerHTML = "";
+            carrinho.forEach(i => {
+                list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${i.n}</span><span style="color:var(--red); cursor:pointer;" onclick="remover(${i.id})">✖</span></div>`;
+            });
             const t = carrinho.reduce((s,i) => s + i.p, 0);
             document.getElementById('cart-total').innerText = t;
             document.getElementById('cart-bar').style.display = carrinho.length > 0 ? 'flex' : 'none';
         }
 
-        function abrirModal() { 
-            document.getElementById('val-total').innerText = document.getElementById('cart-total').innerText; 
-            document.getElementById('payment-modal').style.display='block'; 
-            document.getElementById('modal-overlay').style.display='block'; 
-        }
-        function fecharModal() { 
-            document.getElementById('payment-modal').style.display='none'; 
-            document.getElementById('modal-overlay').style.display='none'; 
-        }
+        function mostrarAjuda() { document.getElementById('modal-ajuda').style.display='block'; document.getElementById('modal-overlay').style.display='block'; }
+        function abrirPagamento() { document.getElementById('val-total').innerText = document.getElementById('cart-total').innerText; document.getElementById('modal-pagamento').style.display='block'; document.getElementById('modal-overlay').style.display='block'; }
+        function fecharModais() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); document.getElementById('modal-overlay').style.display='none'; }
 
-        async function finalizarPedido() {
+        async function finalizar() {
             const idFF = document.getElementById('p-id-ff').value;
             const idT = document.getElementById('p-id-trans').value;
-            if(!idFF || !idT) return alert("Preencha os dados de pagamento!");
-            const p = { 
-                cliente: auth.currentUser.email, 
-                id_ff: idFF, 
-                id_trans: idT, 
-                total: document.getElementById('cart-total').innerText, 
-                itens: carrinho.map(i=>i.n).join(", "), 
-                data: new Date().toLocaleString() 
-            };
-            await db.collection("pedidos").add(p);
-            window.open(`https://wa.me/258840474014?text=${encodeURIComponent('Olá Yanikzx9! Pedido FF ID: '+idFF+' | Valor: '+p.total+'MT')}`);
-            carrinho = []; atualizar(); fecharModal();
+            if(!idFF || !idT) return alertaBonito("AVISO", "Faltam dados!");
+            const p = { cliente: auth.currentUser.email, id_ff: idFF, id_trans: idT, total: document.getElementById('cart-total').innerText, itens: carrinho.map(i=>i.n).join(", ") };
+            try {
+                await db.collection("pedidos").add(p);
+                window.open(`https://wa.me/258840474014?text=${encodeURIComponent('🔥 NOVO PEDIDO\nID FF: '+idFF+'\nTotal: '+p.total+'MT\nID Trans: '+idT)}`);
+                carrinho = []; atualizarCarrinho(); fecharModais();
+            } catch(e) { alertaBonito("ERRO", e.message); }
         }
     </script>
 </body>
-</html>
+              </html>
