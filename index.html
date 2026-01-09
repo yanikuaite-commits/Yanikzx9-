@@ -2,116 +2,178 @@
 <html lang="pt-pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Yanikzx9 Store | Oficial</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
         :root { --blue: #3081f1; --dark-blue: #1a4fa0; --card: rgba(22, 27, 34, 0.98); --green: #25d366; --red: #ff4444; }
-        body { font-family: 'Segoe UI', sans-serif; color: white; margin: 0; background: #0d1117; padding-bottom: 90px; }
+        body { font-family: 'Segoe UI', sans-serif; color: white; margin: 0; background: #0d1117; padding-bottom: 100px; overflow-x: hidden; }
         .overlay-global { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), url('https://images8.alphacoders.com/105/1052862.jpg'); background-size: cover; z-index: -1; }
-        .container { padding: 20px; max-width: 500px; margin: auto; }
-        
-        .support-btn { position: fixed; bottom: 85px; right: 20px; background: var(--green); color: white; padding: 12px 18px; border-radius: 50px; font-weight: bold; text-decoration: none; z-index: 5000; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: 2px solid white; font-size: 13px; }
-
-        /* Estilo dos Cards de Catálogo (Menu) */
-        .catalog-card { 
-            width: 100%; height: 110px; border-radius: 15px; margin-bottom: 15px; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            cursor: pointer; position: relative; overflow: hidden;
-            background: linear-gradient(135deg, var(--dark-blue) 0%, var(--blue) 100%);
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-        .catalog-card::before {
-            content: "YANIKZX9 STORE";
-            position: absolute; font-size: 28px; font-weight: 900; opacity: 0.1;
-            white-space: nowrap; transform: rotate(-10deg); color: white;
-        }
-
-        /* Estilo da Tela de Produtos (Dentro do Catálogo) */
-        #products-screen {
-            position: relative;
-            background: linear-gradient(rgba(13, 17, 23, 0.8), rgba(26, 79, 160, 0.4)), url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-            border-radius: 20px;
-            padding: 15px;
-            border: 1px solid var(--blue);
-            min-height: 400px;
-            overflow: hidden;
-        }
-        /* Marca d'água dentro da lista */
-        .watermark-bg {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
-            font-size: 40px; font-weight: 900; color: rgba(255, 255, 255, 0.05);
-            white-space: nowrap; pointer-events: none; width: 100%; text-align: center;
-        }
-
-        .box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--blue); text-align: center; }
-        input { width: 100%; padding: 14px; margin: 10px 0; border-radius: 8px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; }
-        .btn { width: 100%; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; margin-top: 10px; }
-        
-        .item { 
-            background: rgba(22, 27, 34, 0.9); border: 1px solid rgba(48, 129, 241, 0.3); 
-            padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; 
-            align-items: center; margin-bottom: 10px; position: relative; z-index: 1;
-        }
-
-        #cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #161b22; border-top: 3px solid var(--blue); padding: 15px; display: none; justify-content: space-between; align-items: center; z-index: 4000; }
-        #payment-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 400px; background: #0d1117; border: 2px solid var(--green); border-radius: 15px; padding: 25px; z-index: 6000; }
+        .container { padding: 15px; max-width: 500px; margin: auto; }
+        .box { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid var(--blue); text-align: center; }
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; font-size: 16px; }
+        .btn { width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; margin-top: 10px; width: 100%; }
+        .catalog-card { width: 100%; height: 100px; border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: linear-gradient(135deg, var(--dark-blue) 0%, var(--blue) 100%); border: 2px solid rgba(255,255,255,0.2); }
+        .item { background: rgba(33, 38, 45, 0.9); border: 1px solid rgba(48, 129, 241, 0.3); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        #cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #161b22; border-top: 3px solid var(--blue); padding: 20px; display: none; justify-content: space-between; align-items: center; z-index: 4000; box-sizing: border-box; }
+        #payment-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 400px; background: #0d1117; border: 2px solid var(--green); border-radius: 20px; padding: 20px; z-index: 6000; }
         #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 5500; }
     </style>
 </head>
 <body>
     <div class="overlay-global"></div>
-
-    <a href="https://wa.me/258840474014?text=Olá, Yanikzx9! Preciso de ajuda." class="support-btn" target="_blank">Atendimento ao Cliente 🎧</a>
-
     <div class="container">
         <div id="auth-screen">
             <div class="box">
-                <img src="https://i.ibb.co/XrnM3hB/logo-yanikzx9.jpg" style="width:100px; border-radius:50%; border:3px solid var(--blue); margin-bottom:15px;">
+                <img src="https://i.ibb.co/XrnM3hB/logo-yanikzx9.jpg" style="width:80px; border-radius:50%; margin-bottom:15px;">
                 <h2 style="color: var(--blue); margin:0;">YANIKZX9 STORE</h2>
                 <input type="email" id="email" placeholder="E-mail">
                 <input type="password" id="pass" placeholder="Senha">
-                <button class="btn" style="background: var(--blue); color:white;" onclick="entrar()">Entrar</button>
-                <button class="btn" style="background: var(--green); color:white;" onclick="cadastrar()">Criar Conta</button>
+                <button class="btn" style="background: var(--blue); color:white;" onclick="entrar()">ENTRAR</button>
+                <button class="btn" style="background: #30363d; color:white;" onclick="cadastrar()">CRIAR CONTA</button>
             </div>
         </div>
 
         <div id="menu-screen" style="display: none;">
             <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="margin:0;">Catálogos Yanikzx9</h3>
-                <button onclick="location.reload()" style="background:none; border:none; color:var(--red); font-weight:bold; cursor:pointer;">SAIR</button>
+                <span id="user-display" style="font-size: 12px;"></span>
+                <button onclick="location.reload()" style="background:var(--red); border:none; color:white; padding: 5px 10px; border-radius: 5px;">SAIR</button>
             </div>
-            
-            <div id="btn-adm-acesso" style="display:none; margin-bottom: 20px;">
-                <button class="btn" style="background: #6e40c9; color:white;" onclick="abrirPainelADM()">PAINEL ADM 📊</button>
-            </div>
-
-            <div class="catalog-card" onclick="abrirCategoria('assinaturas')"><h3>🆔 ASSINATURAS</h3></div>
-            <div class="catalog-card" onclick="abrirCategoria('topup')"><h3>💎💎 TOP-UP</h3></div>
-            <div class="catalog-card" onclick="abrirCategoria('bonus')"><h3>🎁 BÔNUS</h3></div>
+            <div class="catalog-card" onclick="abrirCategoria('bonus')"><h3>🎁 BÔNUS (+)</h3></div>
             <div class="catalog-card" onclick="abrirCategoria('padrao')"><h3>🛡️ PADRÃO</h3></div>
+            <div class="catalog-card" onclick="abrirCategoria('assinaturas')"><h3>🆔 ASSINATURAS</h3></div>
         </div>
 
         <div id="products-screen" style="display: none;">
-            <div class="watermark-bg">YANIKZX9 STORE</div>
-            <button class="btn" style="background: #30363d; color:white; position:relative; z-index:2;" onclick="voltarMenu()">⬅ VOLTAR</button>
-            <h2 id="cat-title" style="text-align: center; color: var(--blue); position:relative; z-index:2;"></h2>
+            <button class="btn" style="background: #30363d; color:white; margin-bottom:15px;" onclick="voltarMenu()">⬅ VOLTAR</button>
+            <h2 id="cat-title" style="text-align: center; color: var(--blue);"></h2>
             <div id="products-list"></div>
-        </div>
-
-        <div id="adm-screen" style="display: none;">
-            <button class="btn" style="background: #30363d; color:white;" onclick="voltarMenu()">⬅ VOLTAR</button>
-            <h2 style="color: var(--green); text-align: center;">PEDIDOS</h2>
-            <div id="lista-transacoes"></div>
         </div>
     </div>
 
     <div id="modal-overlay"></div>
     <div id="payment-modal">
-        <h3 style="color: var(--green); margin-top:0;">M-Pesa Jacinta Márcia</h3>
-        <p>Total: <strong id="val-total"></strong> MT<br>Número: <strong>840474014</strong></p>
-        <input type="text" id="p-id-ff" placeholder="ID do Jogador FF">
-        <input type="text" id="p-id-trans" placeholder="ID da Transação M-Pesa"
-        
+        <h3 style="color:var(--green); text-align:center;">M-PESA: 840474014</h3>
+        <p style="text-align:center;">Total: <span id="val-total"></span> MT</p>
+        <input type="number" id="p-id-ff" placeholder="ID Jogador FF">
+        <input type="text" id="p-id-trans" placeholder="ID Transação M-Pesa">
+        <button class="btn" style="background: var(--green); color:white;" onclick="finalizarPedido()">PAGAR AGORA ✅</button>
+        <button class="btn" style="background:none; color:var(--red);" onclick="fecharModal()">CANCELAR</button>
+    </div>
+
+    <div id="cart-bar">
+        <div>Total: <strong id="cart-total">0</strong> MT</div>
+        <button class="btn" style="background: var(--blue); color:white; width:auto; padding: 10px 20px;" onclick="abrirModal()">COMPRAR</button>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCb1O0tPAmk9Kuhgea4ju53IZPyw77FiFI",
+            authDomain: "planning-with-ai-f24a5.firebaseapp.com",
+            projectId: "planning-with-ai-f24a5",
+            storageBucket: "planning-with-ai-f24a5.firebasestorage.app",
+            messagingSenderId: "310393869088",
+            appId: "1:310393869088:web:f9ee8ad089767c9d5abd45"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // TABELAS DE PREÇOS CONFORME AS TUAS IMAGENS
+        const dados = {
+            bonus: [
+                {n:"100 + 10 Diamonds", p:80},
+                {n:"210 + 21 Diamonds", p:150},
+                {n:"530 + 53 Diamonds", p:350},
+                {n:"1080 + 108 Diamonds", p:700},
+                {n:"2200 + 220 Diamonds", p:1400}
+            ],
+            padrao: [
+                {n:"100 Diamonds", p:85},
+                {n:"210 Diamonds", p:155},
+                {n:"530 Diamonds", p:370},
+                {n:"1080 Diamonds", p:700},
+                {n:"2200 Diamonds", p:1500}
+            ],
+            assinaturas: [
+                {n:"Semanal", p:190}, 
+                {n:"Mensal", p:790}, 
+                {n:"Passe Booyah", p:250}
+            ]
+        };
+
+        let carrinho = [];
+
+        function entrar() {
+            const e = document.getElementById('email').value;
+            const s = document.getElementById('pass').value;
+            auth.signInWithEmailAndPassword(e, s)
+                .then(u => { 
+                    document.getElementById('auth-screen').style.display='none';
+                    document.getElementById('menu-screen').style.display='block';
+                    document.getElementById('user-display').innerText = "Logado: " + u.user.email;
+                })
+                .catch(err => alert("Erro: " + err.message));
+        }
+
+        function cadastrar() {
+            const e = document.getElementById('email').value;
+            const s = document.getElementById('pass').value;
+            auth.createUserWithEmailAndPassword(e, s)
+                .then(() => alert("Conta criada! Clique em ENTRAR."))
+                .catch(err => alert("Erro: " + err.message));
+        }
+
+        function abrirCategoria(c) {
+            document.getElementById('menu-screen').style.display='none';
+            document.getElementById('products-screen').style.display='block';
+            document.getElementById('cat-title').innerText = c === 'bonus' ? "OFERTAS BÔNUS (+)" : "OFERTAS PADRÃO";
+            const l = document.getElementById('products-list'); l.innerHTML = "";
+            dados[c].forEach(x => {
+                l.innerHTML += `<div class="item"><span>${x.n}</span><div><strong>${x.p} MT</strong> <button onclick="add('${x.n}',${x.p})" style="background:var(--blue); color:white; border:none; padding:8px 12px; border-radius:5px; margin-left:10px;">+</button></div></div>`;
+            });
+        }
+
+        function voltarMenu() { 
+            document.getElementById('products-screen').style.display='none'; 
+            document.getElementById('menu-screen').style.display='block'; 
+        }
+
+        function add(n,p) { carrinho.push({n,p}); atualizar(); }
+        function atualizar() {
+            const t = carrinho.reduce((s,i) => s + i.p, 0);
+            document.getElementById('cart-total').innerText = t;
+            document.getElementById('cart-bar').style.display = carrinho.length > 0 ? 'flex' : 'none';
+        }
+
+        function abrirModal() { 
+            document.getElementById('val-total').innerText = document.getElementById('cart-total').innerText; 
+            document.getElementById('payment-modal').style.display='block'; 
+            document.getElementById('modal-overlay').style.display='block'; 
+        }
+        function fecharModal() { 
+            document.getElementById('payment-modal').style.display='none'; 
+            document.getElementById('modal-overlay').style.display='none'; 
+        }
+
+        async function finalizarPedido() {
+            const idFF = document.getElementById('p-id-ff').value;
+            const idT = document.getElementById('p-id-trans').value;
+            if(!idFF || !idT) return alert("Preencha os dados de pagamento!");
+            const p = { 
+                cliente: auth.currentUser.email, 
+                id_ff: idFF, 
+                id_trans: idT, 
+                total: document.getElementById('cart-total').innerText, 
+                itens: carrinho.map(i=>i.n).join(", "), 
+                data: new Date().toLocaleString() 
+            };
+            await db.collection("pedidos").add(p);
+            window.open(`https://wa.me/258840474014?text=${encodeURIComponent('Olá Yanikzx9! Pedido FF ID: '+idFF+' | Valor: '+p.total+'MT')}`);
+            carrinho = []; atualizar(); fecharModal();
+        }
+    </script>
+</body>
+</html>
