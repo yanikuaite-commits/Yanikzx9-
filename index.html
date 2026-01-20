@@ -6,332 +6,239 @@
     <title>Yanikzx9 Store | Oficial</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
     <style>
-        :root { --blue: #3081f1; --dark-blue: #1a4fa0; --card: rgba(22, 27, 34, 0.98); --green: #25d366; --red: #ff4444; }
+        :root { 
+            --blue: #3081f1; --red: #ff4444; --gold: #f1c40f; --green: #2ecc71; --glass: rgba(255, 255, 255, 0.05);
+        }
         
         body { 
-            font-family: 'Segoe UI', sans-serif; 
-            color: white; 
-            margin: 0; 
-            background: #000; 
-            padding-bottom: 150px; 
-            overflow-x: hidden; 
-            position: relative; 
-        }
-        
-        body::before { 
-            content: "YANIKZX9 STORE"; 
-            position: fixed; top: 50%; left: 50%; 
-            transform: translate(-50%, -50%) rotate(-30deg); 
-            font-size: 10vw; color: rgba(255,255,255,0.02); 
-            font-weight: bold; z-index: -1; white-space: nowrap; pointer-events: none; 
+            margin: 0; padding: 0; font-family: 'Poppins', sans-serif; 
+            background: radial-gradient(circle at top right, #1a1f2b, #080a0f);
+            background-color: #080a0f; color: white; height: 100vh; overflow: hidden; 
         }
 
-        .overlay-global { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.95)), url('https://images8.alphacoders.com/105/1052862.jpg'); 
-            background-size: cover; z-index: -2; 
+        .container { height: 100%; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; position: relative; z-index: 5; }
+        .main-logo { font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; text-align: center; margin: 40px 0; color: var(--blue); text-shadow: 0 0 20px rgba(48, 129, 241, 0.7); }
+
+        .page { display: none; height: 100%; animation: pageIn 0.4s ease; flex-direction: column; }
+        .page.active { display: flex; }
+        @keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-back-giant {
+            width: 100%; padding: 22px; background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px; color: #fff; font-weight: 900; font-size: 16px; margin-top: auto; margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: center; gap: 15px; text-transform: uppercase; cursor: pointer;
         }
 
-        .container { padding: 15px; max-width: 500px; margin: auto; }
-        
-        .main-logo { 
-            font-family: 'Arial Black', sans-serif; font-size: 28px; 
-            color: var(--blue); text-shadow: 0 0 15px rgba(48, 129, 241, 0.5); 
-            margin-bottom: 20px; text-align: center; 
+        .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .cat-box {
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+            aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 11px;
+        }
+        .cat-box.vip { grid-column: span 3; aspect-ratio: auto; padding: 25px; border: 2px solid var(--gold); color: var(--gold); font-size: 16px; margin-top: 10px; }
+
+        .game-selector {
+            background: var(--glass); border: 2px solid var(--blue); border-radius: 25px;
+            padding: 35px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;
+            font-size: 20px; font-weight: 900;
         }
 
-        .btn, .header-btn, .catalog-card, .item { 
-            border: 2px solid var(--green) !important; 
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
+        .product-list { flex-grow: 1; overflow-y: auto; padding-bottom: 120px; scrollbar-width: none; }
+        .card-item {
+            background: rgba(255,255,255,0.03); border-radius: 20px; padding: 20px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center; border-left: 6px solid var(--blue);
         }
+        .card-item.out { opacity: 0.5; border-left-color: #555; }
+        .card-item.vip-card { border-left-color: var(--gold); background: rgba(241, 196, 15, 0.05); }
 
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-top: 20px;
-            margin-bottom: 15px;
+        .price-label { font-weight: 900; color: var(--green); font-size: 20px; margin-right: 15px; }
+        .btn-add { background: var(--blue); border: none; color: white; border-radius: 12px; width: 45px; height: 45px; font-size: 24px; font-weight: 900; cursor: pointer; }
+        .btn-out { background: #333; color: #777; font-size: 10px; padding: 5px; border-radius: 8px; border: none; }
+
+        .fab-container-right { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 2000; }
+        .cart-fab {
+            position: fixed; bottom: 30px; left: 20px; width: 70px; height: 70px; border-radius: 50%;
+            background: var(--green); border: 3px solid white; color: black; display: none;
+            align-items: center; justify-content: center; z-index: 2000;
         }
+        .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--red); color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 14px; font-weight: 900; display: flex; align-items: center; justify-content: center; border: 2px solid white; }
 
-        .catalog-card {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            background: linear-gradient(135deg, var(--dark-blue) 0%, var(--blue) 100%);
-            border-radius: 15px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 11px;
-        }
-
-        .catalog-card div { font-size: 24px; margin-bottom: 5px; }
-
-        .info-next-update {
-            background: rgba(37, 211, 102, 0.1);
-            border-left: 4px solid var(--green);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            color: var(--green);
-            font-size: 13px;
-            line-height: 1.5;
-            font-weight: 500;
-        }
-
-        .floating-support {
-            position: fixed;
-            bottom: 100px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 15px;
-            z-index: 3000;
-        }
-
-        .float-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .float-label {
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            border: 1px solid var(--green);
-            white-space: nowrap;
-        }
-
-        .float-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            border: 2px solid var(--green);
-            transition: 0.3s;
-        }
-        
-        .btn-wa { background: #25d366; }
-        .btn-gp { background: var(--blue); }
-
-        .header-btn { width: 100%; background: var(--blue); color: white; padding: 15px; border-radius: 12px; font-weight: bold; margin-bottom: 15px; cursor: pointer; border: none; }
-        .box { background: var(--card); padding: 30px 20px; border-radius: 20px; border: 2px solid var(--blue); text-align: center; }
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; font-size: 16px; outline: none; }
-        .btn { width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; border: none; }
-        .item { background: rgba(33, 38, 45, 0.9); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 400px; background: #0d1117; border: 2px solid var(--green); border-radius: 20px; padding: 25px; z-index: 6000; box-shadow: 0 0 30px rgba(37, 211, 102, 0.2); }
-        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 5500; }
-        
-        .transfer-highlight { 
-            display: block; 
-            background: rgba(37, 211, 102, 0.15); 
-            border: 2px dashed var(--green); 
-            color: var(--green); 
-            font-size: 24px; 
-            font-weight: bold; 
-            padding: 12px; 
-            margin: 15px 0; 
-            border-radius: 10px; 
-            text-align: center; 
-        }
-
-        #cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #161b22; border-top: 3px solid var(--green); padding: 15px; display: none; flex-direction: column; z-index: 4000; box-sizing: border-box; }
+        .fab { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; border: 2px solid white; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.96); z-index:10000; align-items:center; justify-content:center; }
+        .modal-box { background: #161b22; width: 85%; padding: 30px; border-radius: 30px; border: 1px solid #333; max-height: 80vh; overflow-y: auto; }
+        .input-premium { width: 100%; padding: 18px; margin-bottom: 12px; border-radius: 15px; border: 1px solid #333; background: #000; color: white; box-sizing: border-box; outline: none; }
     </style>
 </head>
 <body>
-    <div class="overlay-global"></div>
-    
-    <div id="floating-menu" class="floating-support" style="display: none;">
-        <a href="https://wa.me/258840474014" target="_blank" class="float-item">
-            <span class="float-label">Atendimento ao Cliente</span>
-            <div class="float-btn btn-wa">🎧</div>
-        </a>
-        <a href="https://chat.whatsapp.com/LZTcrcTxJCL6lXhTNV9lcd" target="_blank" class="float-item">
-            <span class="float-label">Grupo do Site</span>
-            <div class="float-btn btn-gp">👥</div>
-        </a>
+
+    <div id="cart-fab" class="cart-fab" onclick="abrirModalCarrinho()">
+        <span id="cart-count" class="cart-badge">0</span>
+        <span style="font-size: 30px;">🛒</span>
+    </div>
+
+    <div class="fab-container-right">
+        <div class="fab" style="background: #3081f1;" onclick="window.open('https://chat.whatsapp.com/LZTcrcTxJCL6lXhTNV9lcd')">💬</div>
+        <div class="fab" style="background: #25d366;" onclick="window.open('https://wa.me/258840474014')">👨‍💻</div>
     </div>
 
     <div class="container">
-        <div id="auth-screen">
-            <div class="box">
-                <div class="main-logo">YANIKZX9 STORE</div>
-                <input type="email" id="email" placeholder="E-mail">
-                <input type="password" id="pass" placeholder="Senha">
-                <button class="btn" style="background: var(--blue); color:white;" onclick="entrar()">ENTRAR</button>
-                <button class="btn" style="background: #30363d; color:white;" onclick="cadastrar()">CRIAR CONTA</button>
+        <section id="p-login" class="page active">
+            <div class="main-logo">YANIKZX9 STORE</div>
+            <div style="background: var(--glass); padding: 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);">
+                <input type="email" id="email" class="input-premium" placeholder="E-mail">
+                <input type="password" id="pass" class="input-premium" placeholder="Senha">
+                <button onclick="fazerLogin()" class="btn-back-giant" style="background:var(--blue); border:none; margin-top:10px; margin-bottom:10px;">ENTRAR</button>
+                <button onclick="fazerCadastro()" class="btn-back-giant" style="background:transparent; border:1px solid #fff; margin-bottom:0;">CRIAR CONTA</button>
             </div>
+        </section>
+
+        <section id="p-menu" class="page">
+            <div class="main-logo">MENU</div>
+            <div class="game-selector" onclick="navegarPara('p-ff-menu')"><span>💎 FREE FIRE</span> <span>➔</span></div>
+            <div class="game-selector" style="border-color: var(--red);" onclick="abrirBS()"><span>🔫 BLOOD STRIKE</span> <span>➔</span></div>
+            <button onclick="navegarPara('p-login')" class="btn-back-giant">SAIR DA CONTA</button>
+        </section>
+
+        <section id="p-ff-menu" class="page">
+            <div class="main-logo">FF CATEGORIAS</div>
+            <div class="cat-grid">
+                <div class="cat-box" onclick="abrirCat('bonus')">🎁 BÔNUS</div>
+                <div class="cat-box" onclick="abrirCat('padrao')">🛡️ PADRÃO</div>
+                <div class="cat-box" onclick="abrirCat('assinaturas')">🆔 ASSINAR</div>
+                <div class="cat-box vip" onclick="abrirCat('contas')">👑 CONTA MESTRE VIP (500MT)</div>
+            </div>
+            <button onclick="navegarPara('p-menu')" class="btn-back-giant">VOLTAR AO MENU</button>
+        </section>
+
+        <section id="p-vendas" class="page">
+            <div id="vendas-titulo" class="main-logo" style="font-size: 20px;">PRODUTOS</div>
+            <div id="lista-vendas" class="product-list"></div>
+            <button onclick="voltarPagina()" class="btn-back-giant">VOLTAR</button>
+        </section>
+    </div>
+
+    <div id="modal-carrinho" class="modal">
+        <div class="modal-box">
+            <h2 style="color:var(--blue); margin:0 0 10px 0;">MEU CESTO</h2>
+            <div id="lista-carrinho-itens"></div>
+            <div style="padding: 15px; background: rgba(0,0,0,0.5); border-radius: 15px; margin: 20px 0;">
+                <span id="modal-total" style="font-size: 28px; font-weight: 900; color: var(--green);">0</span> <b>MT</b>
+            </div>
+            <button onclick="abrirModalPagamento()" class="btn-back-giant" style="background:var(--green); border:none; color:black;">PAGAR AGORA</button>
+            <button onclick="document.getElementById('modal-carrinho').style.display='none'" class="btn-back-giant" style="background:transparent; border:1px solid #555;">FECHAR</button>
         </div>
-
-        <div id="menu-screen" style="display: none;">
-            <div class="main-logo" style="font-size: 20px;">MENU PRINCIPAL</div>
-            <button class="header-btn" onclick="mostrarAjuda()">❓ COMO RECARREGAR?</button>
-            
-            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <span id="user-display" style="font-size: 10px; color: var(--blue);"></span>
-                <button onclick="location.reload()" style="background:var(--red); border:none; color:white; padding: 5px 12px; border-radius: 8px; font-weight: bold; font-size: 10px;">SAIR</button>
-            </div>
-
-            <div class="menu-grid">
-                <div class="catalog-card" onclick="abrirCategoria('bonus')"><div>🎁</div><span>BÔNUS</span></div>
-                <div class="catalog-card" onclick="abrirCategoria('padrao')"><div>🛡️</div><span>PADRÃO</span></div>
-                <div class="catalog-card" onclick="abrirCategoria('assinaturas')"><div>🆔</div><span>ASSINAR</span></div>
-            </div>
-
-            <div class="info-next-update">
-                ⚠️ <b>AVISO:</b> Brevemente teremos mais opções de compra em mais jogos como (Pubg, Roblox e Blood strike) na próxima atualização que é na sexta feira. Faça parte do grupo clicando no segundo botão dos botões flutuantes.
-            </div>
-        </div>
-
-        <div id="products-screen" style="display: none;">
-            <button class="btn" style="background: #30363d; color:white; margin-bottom:15px; border: 1px solid white !important;" onclick="voltar()">⬅ VOLTAR</button>
-            <h2 id="cat-title" style="text-align: center; color: var(--blue); font-size: 18px;"></h2>
-            <div id="products-list"></div>
-        </div>
     </div>
 
-    <div id="modal-overlay"></div>
-    <div id="modal-ajuda" class="modal">
-        <h3 style="color:var(--green); text-align:center; margin-top:0;">COMO RECARREGAR?</h3>
-        <p style="font-size: 14px;">1. Primeiro, faça a transferência para:</p>
-        <div class="transfer-highlight">840474014</div>
-        <p style="font-size: 14px; line-height: 1.6;">
-            2. Escolha os seus itens <b>clicando no botão (+)</b> da oferta desejada e depois clique no botão <b>PAGAR</b> que aparecerá no fundo da tela.
-        </p>
-        <p style="font-size: 14px;">3. No formulário final, insira o seu <b>ID do Free Fire</b> e o <b>ID da Transação M-Pesa</b>.</p>
-        <button class="btn" style="background:var(--blue); color:white; margin-top:15px;" onclick="fecharModais()">ENTENDI!</button>
-    </div>
-
-    <div id="custom-alert" class="modal">
-        <h3 id="alert-title" style="text-align: center; color: var(--blue);">AVISO</h3>
-        <p id="alert-msg" style="text-align: center; margin: 20px 0;"></p>
-        <button class="btn" style="background: var(--blue); color:white;" onclick="fecharModais()">OK</button>
-    </div>
-
-    <div id="modal-pagamento" class="modal">
-        <h3 style="color:var(--green); text-align:center;">PAGAMENTO</h3>
-        <div class="transfer-highlight" style="font-size: 18px;">M-Pesa: 840474014</div>
-        <p style="text-align:center;">Total: <b id="val-total"></b> MT</p>
-        <input type="number" id="p-id-ff" placeholder="ID do Jogador Free Fire">
-        <input type="text" id="p-id-trans" placeholder="ID da Transação M-Pesa">
-        <button class="btn" style="background: var(--green); color:white;" onclick="finalizar()">CONFIRMAR ✅</button>
-        <button class="btn" style="background:none; color:var(--red);" onclick="fecharModais()">CANCELAR</button>
-    </div>
-
-    <div id="cart-bar">
-        <div id="cart-items-list" style="margin-bottom: 10px; max-height: 80px; overflow-y: auto; font-size: 12px;"></div>
-        <div style="display:flex; justify-content: space-between; align-items: center;">
-            <div>Total: <strong id="cart-total" style="color:var(--green); font-size: 18px;">0</strong> MT</div>
-            <button class="btn" style="background: var(--blue); color:white; width:auto; padding: 10px 20px; margin:0;" onclick="abrirPagamento()">PAGAR</button>
+    <div id="modal-pay" class="modal">
+        <div class="modal-box">
+            <h3 style="color:var(--green); text-align:center;">PAGAMENTO</h3>
+            <select id="pay-met" class="input-premium"><option>M-Pesa</option></select>
+            <input type="text" id="player-id" class="input-premium" placeholder="ID do Jogador">
+            <input type="text" id="trans-id" class="input-premium" placeholder="ID de Transação">
+            <button onclick="finalizarPedido()" class="btn-back-giant" style="background:var(--green); color:black;">FINALIZAR NO WHATSAPP</button>
+            <button onclick="document.getElementById('modal-pay').style.display='none'" style="width:100%; background:none; border:none; color:#555;">Voltar</button>
         </div>
     </div>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyCb1O0tPAmk9Kuhgea4ju53IZPyw77FiFI",
-            authDomain: "planning-with-ai-f24a5.firebaseapp.com",
-            projectId: "planning-with-ai-f24a5",
-            storageBucket: "planning-with-ai-f24a5.firebasestorage.app",
-            messagingSenderId: "310393869088",
-            appId: "1:310393869088:web:f9ee8ad089767c9d5abd45"
+        const auth = firebase.initializeApp({apiKey: "AIzaSyCb1O0tPAmk9Kuhgea4ju53IZPyw77FiFI", authDomain: "planning-with-ai-f24a5.firebaseapp.com", projectId: "planning-with-ai-f24a5", storageBucket: "planning-with-ai-f24a5.firebasestorage.app", messagingSenderId: "310393869088", appId: "1:310393869088:web:f9ee8ad089767c9d5abd45"}).auth();
+
+        const DATABASE = {
+            bonus: [
+                {n:"110+11 Diamonds", p:85, t:"FF", stock:false}, 
+                {n:"231+23 Diamonds", p:165, t:"FF", stock:true},
+                {n:"583+58 Diamonds", p:385, t:"FF", stock:true},
+                {n:"1188+118 Diamonds", p:750, t:"FF", stock:true},
+                {n:"2420+242 Diamonds", p:1500, t:"FF", stock:true}
+            ],
+            padrao: [
+                {n:"100 Diamonds", p:80, t:"FF", stock:false}, 
+                {n:"310 Diamonds", p:240, t:"FF", stock:true},
+                {n:"520 Diamonds", p:400, t:"FF", stock:true},
+                {n:"1060 Diamonds", p:780, t:"FF", stock:true}
+            ],
+            assinaturas: [
+                {n:"Semanal FF", p:195, t:"Ass", stock:true}, 
+                {n:"Mensal FF", p:790, t:"Ass", stock:true},
+                {n:"Passe Booyah", p:400, t:"Ass", stock:true}
+            ],
+            contas: [
+                {n:"CONTA MESTRE VIP #01", p:500, t:"Conta", d:"Saitama, Angelical, Calça Down", stock:true}
+            ],
+            blood: [
+                {n:"100 + 5 Golds", p:80, t:"BS", stock:false}, 
+                {n:"1000 + 100 Golds", p:570, t:"BS", stock:true},
+                {n:"5000 + 700 Golds", p:2800, t:"BS", stock:true}
+            ]
         };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
 
-        const dados = {
-            bonus: [{n:"100+10 Diamonds", p:80}, {n:"210+21 Diamonds", p:150}, {n:"530+53 Diamonds", p:350}, {n:"1080+108 Diamonds", p:700}, {n:"2200+220 Diamonds", p:1400}],
-            padrao: [{n:"100 Diamonds", p:85}, {n:"210 Diamonds", p:155}, {n:"530 Diamonds", p:370}, {n:"1080 Diamonds", p:700}, {n:"2200 Diamonds", p:1500}],
-            assinaturas: [{n:"Semanal", p:190}, {n:"Mensal", p:790}, {n:"Passe Booyah", p:250}]
-        };
+        let jogo = ""; let car = [];
 
-        let carrinho = [];
+        function navegarPara(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function fazerLogin() { auth.signInWithEmailAndPassword(document.getElementById('email').value, document.getElementById('pass').value).then(() => navegarPara('p-menu')).catch(e => alert("Erro no Login!")); }
+        function fazerCadastro() { auth.createUserWithEmailAndPassword(document.getElementById('email').value, document.getElementById('pass').value).then(() => alert("Conta criada!")).catch(e => alert(e.message)); }
+        function abrirBS() { jogo = "BS"; navegarPara('p-vendas'); document.getElementById('vendas-titulo').innerText="BLOOD STRIKE"; render(DATABASE.blood); }
+        function abrirCat(c) { jogo = "FF"; navegarPara('p-vendas'); document.getElementById('vendas-titulo').innerText=c.toUpperCase(); render(DATABASE[c]); }
 
-        function alertaBonito(titulo, msg) {
-            document.getElementById('alert-title').innerText = titulo;
-            document.getElementById('alert-msg').innerText = msg;
-            document.getElementById('custom-alert').style.display = 'block';
-            document.getElementById('modal-overlay').style.display = 'block';
-        }
-
-        function entrar() {
-            const e = document.getElementById('email').value;
-            const s = document.getElementById('pass').value;
-            if(!e || !s) return alertaBonito("ERRO", "Preencha tudo!");
-            auth.signInWithEmailAndPassword(e, s).then(u => { 
-                document.getElementById('auth-screen').style.display='none';
-                document.getElementById('menu-screen').style.display='block';
-                document.getElementById('floating-menu').style.display='flex';
-                document.getElementById('user-display').innerText = "CONTA: " + u.user.email;
-            }).catch(() => alertaBonito("ERRO", "Dados incorretos!"));
-        }
-
-        function cadastrar() {
-            const e = document.getElementById('email').value;
-            const s = document.getElementById('pass').value;
-            if(s.length < 6) return alertaBonito("AVISO", "Senha mínima 6 dígitos.");
-            auth.createUserWithEmailAndPassword(e, s).then(() => alertaBonito("OK", "Conta criada!")).catch(err => alertaBonito("ERRO", err.message));
-        }
-
-        function abrirCategoria(c) {
-            document.getElementById('menu-screen').style.display='none';
-            document.getElementById('products-screen').style.display='block';
-            document.getElementById('cat-title').innerText = c.toUpperCase();
-            const l = document.getElementById('products-list'); l.innerHTML = "";
-            dados[c].forEach(x => {
-                l.innerHTML += `<div class="item"><span>${x.n}</span><div><strong>${x.p} MT</strong> <button onclick="add('${x.n}',${x.p})" style="background:var(--blue); color:white; border:1px solid var(--green) !important; padding:8px 12px; border-radius:5px; margin-left:10px;">+</button></div></div>`;
+        function render(itens) {
+            const container = document.getElementById('lista-vendas');
+            container.innerHTML = "";
+            itens.forEach(i => {
+                const isVip = i.t === "Conta";
+                const isOut = i.stock === false;
+                container.innerHTML += `
+                <div class="card-item ${isVip?'vip-card':''} ${jogo==='BS'?'bs':''} ${isOut?'out':''}">
+                    <div><b>${i.n}</b>${isVip?'<br><small>'+i.d+'</small>':''}</div>
+                    <div style="display:flex; align-items:center;">
+                        <span class="price-label">${i.p}MT</span>
+                        ${isOut ? '<button class="btn-out" disabled>OUT OF STOCK</button>' : `<button class="btn-add" style="background:${isVip?'var(--gold)':(jogo==='BS'?'var(--red)':'var(--blue)')}" onclick="add('${i.n}',${i.p},'${i.t}')">+</button>`}
+                    </div>
+                </div>`;
             });
         }
 
-        function voltar() { document.getElementById('products-screen').style.display='none'; document.getElementById('menu-screen').style.display='block'; }
-        function add(n,p) { carrinho.push({id: Date.now(), n, p}); atualizarCarrinho(); }
-        function remover(id) { carrinho = carrinho.filter(i => i.id !== id); atualizarCarrinho(); }
+        function add(n, p, t) { car.push({n, p, t}); atualizarCarrinho(); }
+        function remover(idx) { car.splice(idx, 1); atualizarCarrinho(); car.length > 0 ? abrirModalCarrinho() : (document.getElementById('modal-carrinho').style.display='none'); }
 
         function atualizarCarrinho() {
-            const list = document.getElementById('cart-items-list');
-            list.innerHTML = "";
-            carrinho.forEach(i => {
-                list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${i.n}</span><span style="color:var(--red); cursor:pointer;" onclick="remover(${i.id})">✖</span></div>`;
-            });
-            const t = carrinho.reduce((s,i) => s + i.p, 0);
-            document.getElementById('cart-total').innerText = t;
-            document.getElementById('cart-bar').style.display = carrinho.length > 0 ? 'flex' : 'none';
+            document.getElementById('cart-fab').style.display = car.length > 0 ? 'flex' : 'none';
+            document.getElementById('cart-count').innerText = car.length;
+            let total = 0; car.forEach(i => total += i.p);
+            document.getElementById('modal-total').innerText = total;
         }
 
-        function mostrarAjuda() { document.getElementById('modal-ajuda').style.display='block'; document.getElementById('modal-overlay').style.display='block'; }
-        function abrirPagamento() { document.getElementById('val-total').innerText = document.getElementById('cart-total').innerText; document.getElementById('modal-pagamento').style.display='block'; document.getElementById('modal-overlay').style.display='block'; }
-        function fecharModais() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); document.getElementById('modal-overlay').style.display='none'; }
-
-        async function finalizar() {
-            const idFF = document.getElementById('p-id-ff').value;
-            const idT = document.getElementById('p-id-trans').value;
-            if(!idFF || !idT) return alertaBonito("AVISO", "Faltam dados!");
-            const p = { cliente: auth.currentUser.email, id_ff: idFF, id_trans: idT, total: document.getElementById('cart-total').innerText, itens: carrinho.map(i=>i.n).join(", ") };
-            try {
-                await db.collection("pedidos").add(p);
-                window.open(`https://wa.me/258840474014?text=${encodeURIComponent('🔥 NOVO PEDIDO\nID FF: '+idFF+'\nTotal: '+p.total+'MT\nID Trans: '+idT)}`);
-                carrinho = []; atualizarCarrinho(); fecharModais();
-            } catch(e) { alertaBonito("ERRO", e.message); }
+        function abrirModalCarrinho() {
+            document.getElementById('modal-carrinho').style.display = 'flex';
+            document.getElementById('lista-carrinho-itens').innerHTML = car.map((i, idx) => `
+                <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #222; align-items:center;">
+                    <span>${i.n}</span>
+                    <span onclick="remover(${idx})" style="color:var(--red); font-weight:bold; cursor:pointer;">Remover</span>
+                </div>
+            `).join("");
         }
+
+        function abrirModalPagamento() { document.getElementById('modal-carrinho').style.display='none'; document.getElementById('modal-pay').style.display='flex'; }
+
+        function finalizarPedido() {
+            const total = document.getElementById('modal-total').innerText;
+            const pid = document.getElementById('player-id').value;
+            const tid = document.getElementById('trans-id').value;
+            const itens = car.map(i => i.n).join(", ");
+            const tipo = car[0].t;
+
+            let saudacao = "Gostaria de recarregar Diamonds.";
+            if(tipo === "BS") saudacao = "Gostaria de recarregar Golds no Blood Strike.";
+            if(tipo === "Conta") saudacao = "Gostaria de comprar a CONTA MESTRE VIP.";
+            if(tipo === "Ass") saudacao = "Gostaria de activar uma Assinatura/Passe.";
+
+            const final = `Oie Yanik! 👋\n\n*PEDIDO:* ${saudacao}\n*PRODUTOS:* ${itens}\n*TOTAL:* ${total}MT\n*MÉTODO:* M-Pesa\n*ID JOGADOR:* ${pid}\n*ID TRANSAÇÃO:* ${tid}`;
+            window.open(`https://wa.me/258840474014?text=${encodeURIComponent(final)}`);
+        }
+
+        function voltarPagina() { jogo === "BS" ? navegarPara('p-menu') : navegarPara('p-ff-menu'); }
     </script>
 </body>
-              </html>
+</html>
+
