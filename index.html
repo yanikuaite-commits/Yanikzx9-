@@ -1,243 +1,335 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Yanikzx9 Store | Oficial</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site em Manutenção - Yanikzx9 Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { 
-            --blue: #3081f1; --red: #ff4444; --gold: #f1c40f; --green: #2ecc71; --glass: rgba(255, 255, 255, 0.05);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        body { 
-            margin: 0; padding: 0; font-family: 'Poppins', sans-serif; 
-            background: radial-gradient(circle at top right, #1a1f2b, #080a0f);
-            background-color: #080a0f; color: white; height: 100vh; overflow: hidden; 
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
         }
-
-        .container { height: 100%; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; position: relative; z-index: 5; }
-        .main-logo { font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; text-align: center; margin: 40px 0; color: var(--blue); text-shadow: 0 0 20px rgba(48, 129, 241, 0.7); }
-
-        .page { display: none; height: 100%; animation: pageIn 0.4s ease; flex-direction: column; }
-        .page.active { display: flex; }
-        @keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .btn-back-giant {
-            width: 100%; padding: 22px; background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px; color: #fff; font-weight: 900; font-size: 16px; margin-top: auto; margin-bottom: 20px;
-            display: flex; align-items: center; justify-content: center; gap: 15px; text-transform: uppercase; cursor: pointer;
+        
+        .maintenance-container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            border: 2px solid rgba(255, 204, 0, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-
-        .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .cat-box {
-            background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
-            aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 11px;
+        
+        /* Efeito de brilho pulsante */
+        .maintenance-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, transparent 70%);
+            animation: pulse 6s infinite alternate;
+            z-index: -1;
         }
-        .cat-box.vip { grid-column: span 3; aspect-ratio: auto; padding: 25px; border: 2px solid var(--gold); color: var(--gold); font-size: 16px; margin-top: 10px; }
-
-        .game-selector {
-            background: var(--glass); border: 2px solid var(--blue); border-radius: 25px;
-            padding: 35px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;
-            font-size: 20px; font-weight: 900;
+        
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.3; }
+            100% { transform: scale(1.2); opacity: 0.6; }
         }
-
-        .product-list { flex-grow: 1; overflow-y: auto; padding-bottom: 120px; scrollbar-width: none; }
-        .card-item {
-            background: rgba(255,255,255,0.03); border-radius: 20px; padding: 20px; margin-bottom: 12px;
-            display: flex; justify-content: space-between; align-items: center; border-left: 6px solid var(--blue);
+        
+        .warning-icon {
+            font-size: 120px;
+            color: #FFCC00;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 204, 0, 0.7);
+            animation: bounce 2s infinite;
         }
-        .card-item.out { opacity: 0.5; border-left-color: #555; }
-        .card-item.vip-card { border-left-color: var(--gold); background: rgba(241, 196, 15, 0.05); }
-
-        .price-label { font-weight: 900; color: var(--green); font-size: 20px; margin-right: 15px; }
-        .btn-add { background: var(--blue); border: none; color: white; border-radius: 12px; width: 45px; height: 45px; font-size: 24px; font-weight: 900; cursor: pointer; }
-        .btn-out { background: #333; color: #777; font-size: 10px; padding: 5px; border-radius: 8px; border: none; }
-
-        .fab-container-right { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 2000; }
-        .cart-fab {
-            position: fixed; bottom: 30px; left: 20px; width: 70px; height: 70px; border-radius: 50%;
-            background: var(--green); border: 3px solid white; color: black; display: none;
-            align-items: center; justify-content: center; z-index: 2000;
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
-        .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--red); color: white; border-radius: 50%; width: 25px; height: 25px; font-size: 14px; font-weight: 900; display: flex; align-items: center; justify-content: center; border: 2px solid white; }
-
-        .fab { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; border: 2px solid white; }
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.96); z-index:10000; align-items:center; justify-content:center; }
-        .modal-box { background: #161b22; width: 85%; padding: 30px; border-radius: 30px; border: 1px solid #333; max-height: 80vh; overflow-y: auto; }
-        .input-premium { width: 100%; padding: 18px; margin-bottom: 12px; border-radius: 15px; border: 1px solid #333; background: #000; color: white; box-sizing: border-box; outline: none; }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: #FFCC00;
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+            letter-spacing: 2px;
+        }
+        
+        .store-name {
+            color: #ffffff;
+            background: linear-gradient(90deg, #FFCC00, #FF9900);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 4rem;
+            letter-spacing: 3px;
+            margin: 10px 0;
+            display: block;
+        }
+        
+        .message {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            line-height: 1.5;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid #FFCC00;
+        }
+        
+        .highlight {
+            color: #FFCC00;
+            font-weight: bold;
+        }
+        
+        .whatsapp-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            padding: 22px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            margin: 30px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            min-width: 350px;
+        }
+        
+        .whatsapp-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(37, 211, 102, 0.5);
+            background: linear-gradient(135deg, #1da851 0%, #0d7d6f 100%);
+        }
+        
+        .whatsapp-button:active {
+            transform: translateY(0);
+        }
+        
+        .whatsapp-icon {
+            font-size: 2.2rem;
+            margin-right: 15px;
+        }
+        
+        .phone-number {
+            font-size: 1.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border: 2px dashed rgba(255, 204, 0, 0.5);
+        }
+        
+        .instructions {
+            font-size: 1.3rem;
+            margin-top: 40px;
+            color: #aaa;
+            line-height: 1.6;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .admin-contact {
+            font-size: 1.4rem;
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(255, 204, 0, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+        }
+        
+        /* Efeito de manutenção */
+        .tools {
+            margin-top: 40px;
+            font-size: 2rem;
+            color: #aaa;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .tool {
+            animation: toolSpin 4s infinite linear;
+        }
+        
+        @keyframes toolSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .store-name {
+                font-size: 2.8rem;
+            }
+            
+            .message {
+                font-size: 1.5rem;
+            }
+            
+            .whatsapp-button {
+                font-size: 1.5rem;
+                min-width: 300px;
+                padding: 18px 30px;
+            }
+            
+            .phone-number {
+                font-size: 1.5rem;
+            }
+            
+            .warning-icon {
+                font-size: 90px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .maintenance-container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .store-name {
+                font-size: 2.2rem;
+            }
+            
+            .message {
+                font-size: 1.3rem;
+                padding: 15px;
+            }
+            
+            .whatsapp-button {
+                font-size: 1.3rem;
+                min-width: 250px;
+                padding: 15px 25px;
+            }
+            
+            .phone-number {
+                font-size: 1.3rem;
+                padding: 12px 20px;
+            }
+            
+            .instructions {
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 <body>
-
-    <div id="cart-fab" class="cart-fab" onclick="abrirModalCarrinho()">
-        <span id="cart-count" class="cart-badge">0</span>
-        <span style="font-size: 30px;">🛒</span>
-    </div>
-
-    <div class="fab-container-right">
-        <div class="fab" style="background: #3081f1;" onclick="window.open('https://chat.whatsapp.com/LZTcrcTxJCL6lXhTNV9lcd')">💬</div>
-        <div class="fab" style="background: #25d366;" onclick="window.open('https://wa.me/258840474014')">👨‍💻</div>
-    </div>
-
-    <div class="container">
-        <section id="p-login" class="page active">
-            <div class="main-logo">YANIKZX9 STORE</div>
-            <div style="background: var(--glass); padding: 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);">
-                <input type="email" id="email" class="input-premium" placeholder="E-mail">
-                <input type="password" id="pass" class="input-premium" placeholder="Senha">
-                <button onclick="fazerLogin()" class="btn-back-giant" style="background:var(--blue); border:none; margin-top:10px; margin-bottom:10px;">ENTRAR</button>
-                <button onclick="fazerCadastro()" class="btn-back-giant" style="background:transparent; border:1px solid #fff; margin-bottom:0;">CRIAR CONTA</button>
-            </div>
-        </section>
-
-        <section id="p-menu" class="page">
-            <div class="main-logo">MENU</div>
-            <div class="game-selector" onclick="navegarPara('p-ff-menu')"><span>💎 FREE FIRE</span> <span>➔</span></div>
-            <div class="game-selector" style="border-color: var(--red);" onclick="abrirBS()"><span>🔫 BLOOD STRIKE</span> <span>➔</span></div>
-            <button onclick="navegarPara('p-login')" class="btn-back-giant">SAIR DA CONTA</button>
-        </section>
-
-        <section id="p-ff-menu" class="page">
-            <div class="main-logo">FF CATEGORIAS</div>
-            <div class="cat-grid">
-                <div class="cat-box" onclick="abrirCat('bonus')">🎁 BÔNUS</div>
-                <div class="cat-box" onclick="abrirCat('padrao')">🛡️ PADRÃO</div>
-                <div class="cat-box" onclick="abrirCat('assinaturas')">🆔 ASSINAR</div>
-                <div class="cat-box vip" onclick="abrirCat('contas')">👑 CONTA MESTRE VIP (500MT)</div>
-            </div>
-            <button onclick="navegarPara('p-menu')" class="btn-back-giant">VOLTAR AO MENU</button>
-        </section>
-
-        <section id="p-vendas" class="page">
-            <div id="vendas-titulo" class="main-logo" style="font-size: 20px;">PRODUTOS</div>
-            <div id="lista-vendas" class="product-list"></div>
-            <button onclick="voltarPagina()" class="btn-back-giant">VOLTAR</button>
-        </section>
-    </div>
-
-    <div id="modal-carrinho" class="modal">
-        <div class="modal-box">
-            <h2 style="color:var(--blue); margin:0 0 10px 0;">MEU CESTO</h2>
-            <div id="lista-carrinho-itens"></div>
-            <div style="padding: 15px; background: rgba(0,0,0,0.5); border-radius: 15px; margin: 20px 0;">
-                <span id="modal-total" style="font-size: 28px; font-weight: 900; color: var(--green);">0</span> <b>MT</b>
-            </div>
-            <button onclick="abrirModalPagamento()" class="btn-back-giant" style="background:var(--green); border:none; color:black;">PAGAR AGORA</button>
-            <button onclick="document.getElementById('modal-carrinho').style.display='none'" class="btn-back-giant" style="background:transparent; border:1px solid #555;">FECHAR</button>
+    <div class="maintenance-container">
+        <div class="warning-icon">⚠️</div>
+        
+        <h1>SITE EM MANUTENÇÃO</h1>
+        
+        <span class="store-name">Yanikzx9 Store</span>
+        
+        <div class="message">
+            Estamos realizando melhorias para oferecer uma <span class="highlight">experiência ainda melhor</span> para você!
         </div>
-    </div>
-
-    <div id="modal-pay" class="modal">
-        <div class="modal-box">
-            <h3 style="color:var(--green); text-align:center;">PAGAMENTO</h3>
-            <select id="pay-met" class="input-premium"><option>M-Pesa</option></select>
-            <input type="text" id="player-id" class="input-premium" placeholder="ID do Jogador">
-            <input type="text" id="trans-id" class="input-premium" placeholder="ID de Transação">
-            <button onclick="finalizarPedido()" class="btn-back-giant" style="background:var(--green); color:black;">FINALIZAR NO WHATSAPP</button>
-            <button onclick="document.getElementById('modal-pay').style.display='none'" style="width:100%; background:none; border:none; color:#555;">Voltar</button>
+        
+        <div class="admin-contact">
+            Para suporte, recarregamentos ou dúvidas, entre em contato diretamente com o <span class="highlight">ADMINISTRADOR</span>
+        </div>
+        
+        <a href="https://wa.me/258840474014" class="whatsapp-button" target="_blank">
+            <i class="fab fa-whatsapp whatsapp-icon"></i>
+            CONTATAR ADMINISTRADOR
+        </a>
+        
+        <div class="phone-number">
+            <i class="fas fa-phone-alt"></i> +258 84 047 4014
+        </div>
+        
+        <div class="instructions">
+            <p>Clique no botão acima para ser redirecionado automaticamente para o WhatsApp do administrador.</p>
+            <p>Envie sua mensagem com detalhes sobre o recarregamento ou problema encontrado.</p>
+        </div>
+        
+        <div class="tools">
+            <div class="tool">🔧</div>
+            <div class="tool">🛠️</div>
+            <div class="tool">⚙️</div>
+            <div class="tool">💻</div>
         </div>
     </div>
 
     <script>
-        const auth = firebase.initializeApp({apiKey: "AIzaSyCb1O0tPAmk9Kuhgea4ju53IZPyw77FiFI", authDomain: "planning-with-ai-f24a5.firebaseapp.com", projectId: "planning-with-ai-f24a5", storageBucket: "planning-with-ai-f24a5.firebasestorage.app", messagingSenderId: "310393869088", appId: "1:310393869088:web:f9ee8ad089767c9d5abd45"}).auth();
-
-        const DATABASE = {
-            bonus: [
-                {n:"110+11 Diamonds", p:85, t:"FF", stock:false}, 
-                {n:"231+23 Diamonds", p:165, t:"FF", stock:true},
-                {n:"583+58 Diamonds", p:385, t:"FF", stock:true},
-                {n:"1188+118 Diamonds", p:750, t:"FF", stock:true},
-                {n:"2420+242 Diamonds", p:1500, t:"FF", stock:true}
-            ],
-            padrao: [
-                {n:"100 Diamonds", p:80, t:"FF", stock:false}, 
-                {n:"310 Diamonds", p:240, t:"FF", stock:true},
-                {n:"520 Diamonds", p:400, t:"FF", stock:true},
-                {n:"1060 Diamonds", p:780, t:"FF", stock:true}
-            ],
-            assinaturas: [
-                {n:"Semanal FF", p:195, t:"Ass", stock:true}, 
-                {n:"Mensal FF", p:790, t:"Ass", stock:true},
-                {n:"Passe Booyah", p:400, t:"Ass", stock:true}
-            ],
-            contas: [
-                {n:"CONTA MESTRE VIP #01", p:500, t:"Conta", d:"Saitama, Angelical, Calça Down", stock:true}
-            ],
-            blood: [
-                {n:"100 + 5 Golds", p:80, t:"BS", stock:false}, 
-                {n:"1000 + 100 Golds", p:570, t:"BS", stock:true},
-                {n:"5000 + 700 Golds", p:2800, t:"BS", stock:true}
-            ]
-        };
-
-        let jogo = ""; let car = [];
-
-        function navegarPara(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-        function fazerLogin() { auth.signInWithEmailAndPassword(document.getElementById('email').value, document.getElementById('pass').value).then(() => navegarPara('p-menu')).catch(e => alert("Erro no Login!")); }
-        function fazerCadastro() { auth.createUserWithEmailAndPassword(document.getElementById('email').value, document.getElementById('pass').value).then(() => alert("Conta criada!")).catch(e => alert(e.message)); }
-        function abrirBS() { jogo = "BS"; navegarPara('p-vendas'); document.getElementById('vendas-titulo').innerText="BLOOD STRIKE"; render(DATABASE.blood); }
-        function abrirCat(c) { jogo = "FF"; navegarPara('p-vendas'); document.getElementById('vendas-titulo').innerText=c.toUpperCase(); render(DATABASE[c]); }
-
-        function render(itens) {
-            const container = document.getElementById('lista-vendas');
-            container.innerHTML = "";
-            itens.forEach(i => {
-                const isVip = i.t === "Conta";
-                const isOut = i.stock === false;
-                container.innerHTML += `
-                <div class="card-item ${isVip?'vip-card':''} ${jogo==='BS'?'bs':''} ${isOut?'out':''}">
-                    <div><b>${i.n}</b>${isVip?'<br><small>'+i.d+'</small>':''}</div>
-                    <div style="display:flex; align-items:center;">
-                        <span class="price-label">${i.p}MT</span>
-                        ${isOut ? '<button class="btn-out" disabled>OUT OF STOCK</button>' : `<button class="btn-add" style="background:${isVip?'var(--gold)':(jogo==='BS'?'var(--red)':'var(--blue)')}" onclick="add('${i.n}',${i.p},'${i.t}')">+</button>`}
-                    </div>
-                </div>`;
+        // Adiciona efeito de digitação ao número de telefone
+        document.addEventListener('DOMContentLoaded', function() {
+            const phoneNumber = document.querySelector('.phone-number');
+            const originalText = phoneNumber.textContent;
+            phoneNumber.textContent = '';
+            
+            let i = 0;
+            function typeWriter() {
+                if (i < originalText.length) {
+                    phoneNumber.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 50);
+                }
+            }
+            
+            // Inicia o efeito após um breve delay
+            setTimeout(typeWriter, 1000);
+            
+            // Efeito de confirmação ao clicar no botão
+            const whatsappButton = document.querySelector('.whatsapp-button');
+            whatsappButton.addEventListener('click', function() {
+                // Animação de clique
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+                
+                // Mensagem no console (apenas para demonstração)
+                console.log('Redirecionando para o WhatsApp do administrador...');
             });
-        }
-
-        function add(n, p, t) { car.push({n, p, t}); atualizarCarrinho(); }
-        function remover(idx) { car.splice(idx, 1); atualizarCarrinho(); car.length > 0 ? abrirModalCarrinho() : (document.getElementById('modal-carrinho').style.display='none'); }
-
-        function atualizarCarrinho() {
-            document.getElementById('cart-fab').style.display = car.length > 0 ? 'flex' : 'none';
-            document.getElementById('cart-count').innerText = car.length;
-            let total = 0; car.forEach(i => total += i.p);
-            document.getElementById('modal-total').innerText = total;
-        }
-
-        function abrirModalCarrinho() {
-            document.getElementById('modal-carrinho').style.display = 'flex';
-            document.getElementById('lista-carrinho-itens').innerHTML = car.map((i, idx) => `
-                <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #222; align-items:center;">
-                    <span>${i.n}</span>
-                    <span onclick="remover(${idx})" style="color:var(--red); font-weight:bold; cursor:pointer;">Remover</span>
-                </div>
-            `).join("");
-        }
-
-        function abrirModalPagamento() { document.getElementById('modal-carrinho').style.display='none'; document.getElementById('modal-pay').style.display='flex'; }
-
-        function finalizarPedido() {
-            const total = document.getElementById('modal-total').innerText;
-            const pid = document.getElementById('player-id').value;
-            const tid = document.getElementById('trans-id').value;
-            const itens = car.map(i => i.n).join(", ");
-            const tipo = car[0].t;
-
-            let saudacao = "Gostaria de recarregar Diamonds.";
-            if(tipo === "BS") saudacao = "Gostaria de recarregar Golds no Blood Strike.";
-            if(tipo === "Conta") saudacao = "Gostaria de comprar a CONTA MESTRE VIP.";
-            if(tipo === "Ass") saudacao = "Gostaria de activar uma Assinatura/Passe.";
-
-            const final = `Oie Yanik! 👋\n\n*PEDIDO:* ${saudacao}\n*PRODUTOS:* ${itens}\n*TOTAL:* ${total}MT\n*MÉTODO:* M-Pesa\n*ID JOGADOR:* ${pid}\n*ID TRANSAÇÃO:* ${tid}`;
-            window.open(`https://wa.me/258840474014?text=${encodeURIComponent(final)}`);
-        }
-
-        function voltarPagina() { jogo === "BS" ? navegarPara('p-menu') : navegarPara('p-ff-menu'); }
+            
+            // Efeito de piscar no ícone de aviso
+            const warningIcon = document.querySelector('.warning-icon');
+            setInterval(() => {
+                warningIcon.style.textShadow = warningIcon.style.textShadow === '0 0 40px rgba(255, 204, 0, 0.9)' 
+                    ? '0 0 30px rgba(255, 204, 0, 0.7)' 
+                    : '0 0 40px rgba(255, 204, 0, 0.9)';
+            }, 1000);
+        });
     </script>
 </body>
 </html>
