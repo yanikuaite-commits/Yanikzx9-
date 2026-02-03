@@ -1,336 +1,240 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Site em Manutenção - Yanikzx9 Store</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-        
-        .maintenance-container {
-            max-width: 900px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 50px 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            border: 2px solid rgba(255, 204, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Efeito de brilho pulsante */
-        .maintenance-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, transparent 70%);
-            animation: pulse 6s infinite alternate;
-            z-index: -1;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(0.8); opacity: 0.3; }
-            100% { transform: scale(1.2); opacity: 0.6; }
-        }
-        
-        .warning-icon {
-            font-size: 120px;
-            color: #FFCC00;
-            margin-bottom: 20px;
-            text-shadow: 0 0 30px rgba(255, 204, 0, 0.7);
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        
-        h1 {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            color: #FFCC00;
-            text-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
-            letter-spacing: 2px;
-        }
-        
-        .store-name {
-            color: #ffffff;
-            background: linear-gradient(90deg, #FFCC00, #FF9900);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 4rem;
-            letter-spacing: 3px;
-            margin: 10px 0;
-            display: block;
-        }
-        
-        .message {
-            font-size: 1.8rem;
-            margin-bottom: 40px;
-            line-height: 1.5;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 5px solid #FFCC00;
-        }
-        
-        .highlight {
-            color: #FFCC00;
-            font-weight: bold;
-        }
-        
-        .whatsapp-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-            color: white;
-            font-size: 1.8rem;
-            font-weight: bold;
-            padding: 22px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            margin: 30px 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            min-width: 350px;
-        }
-        
-        .whatsapp-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(37, 211, 102, 0.5);
-            background: linear-gradient(135deg, #1da851 0%, #0d7d6f 100%);
-        }
-        
-        .whatsapp-button:active {
-            transform: translateY(0);
-        }
-        
-        .whatsapp-icon {
-            font-size: 2.2rem;
-            margin-right: 15px;
-        }
-        
-        .phone-number {
-            font-size: 1.8rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px 25px;
-            border-radius: 10px;
-            display: inline-block;
-            margin-top: 20px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            border: 2px dashed rgba(255, 204, 0, 0.5);
-        }
-        
-        .instructions {
-            font-size: 1.3rem;
-            margin-top: 40px;
-            color: #aaa;
-            line-height: 1.6;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .admin-contact {
-            font-size: 1.4rem;
-            margin-top: 25px;
-            padding: 15px;
-            background: rgba(255, 204, 0, 0.1);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 204, 0, 0.3);
-        }
-        
-        /* Efeito de manutenção */
-        .tools {
-            margin-top: 40px;
-            font-size: 2rem;
-            color: #aaa;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .tool {
-            animation: toolSpin 4s infinite linear;
-        }
-        
-        @keyframes toolSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Responsividade */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yanikzx9 Store - Recargas Oficiais</title>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCb1O0tPAmk9Kuhgea4ju53IZPyw77FiFI",
+  authDomain: "planning-with-ai-f24a5.firebaseapp.com",
+  databaseURL: "https://planning-with-ai-f24a5-default-rtdb.firebaseio.com",
+  projectId: "planning-with-ai-f24a5",
+  storageBucket: "planning-with-ai-f24a5.firebasestorage.app",
+  messagingSenderId: "310393869088",
+  appId: "1:310393869088:web:f9ee8ad089767c9d5abd45"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getDatabase(app);
+
+// --- FUNÇÕES GLOBAIS ---
+window.handleLogin = async () => {
+    const email = document.getElementById('loginEmail').value;
+    const pass = document.getElementById('loginPassword').value;
+    try { await signInWithEmailAndPassword(auth, email, pass); } 
+    catch(e) { document.getElementById('authError').innerText = 'Email ou senha inválidos.'; }
+};
+
+window.handleSignup = async () => {
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const pass = document.getElementById('signupPassword').value;
+    if(!name || !email || pass.length < 6) { alert('Preencha corretamente'); return; }
+    try {
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+        await set(ref(db, 'users/' + cred.user.uid), { name, email, createdAt: new Date().toISOString() });
+    } catch(e) { alert(e.message); }
+};
+
+window.logout = () => signOut(auth);
+
+window.toggleAuth = () => {
+    document.getElementById('loginForm').classList.toggle('hidden');
+    document.getElementById('signupForm').classList.toggle('hidden');
+};
+
+// --- LÓGICA DE PAGAMENTO ---
+let selectedItem = null;
+window.openPay = (name, price, game) => {
+    selectedItem = { name, price, game };
+    document.getElementById('itemDetail').innerHTML = `
+        <div style="background:#0a0e17; padding:15px; border-radius:8px; margin-bottom:10px;">
+            <strong style="color:var(--primary)">${game}</strong><br>
+            <span>Pacote: ${name}</span><br>
+            <span style="font-size:18px; font-weight:bold;">Total: ${price} MT</span>
+        </div>
+    `;
+    document.getElementById('payModal').style.display = 'flex';
+};
+
+window.confirmPayment = () => {
+    const playerID = document.getElementById('playerID').value;
+    const rechargeID = document.getElementById('rechargeID').value;
+
+    if(!playerID || !rechargeID) {
+        alert("Por favor, preencha o ID do Jogador e a Referência da transferência.");
+        return;
+    }
+
+    const phone = "258840474014"; 
+    const msg = `Olá Yanikzx9! Fiz o pagamento para recarga.\n\n` +
+                `📦 Produto: ${selectedItem.name} (${selectedItem.game})\n` +
+                `💰 Valor: ${selectedItem.price} MT\n` +
+                `🆔 ID Jogador: ${playerID}\n` +
+                `🔑 Referência E-Mola: ${rechargeID}\n` +
+                `👤 Usuário: ${auth.currentUser.email}`;
+    
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+};
+
+window.switchOption = (opt, btn) => {
+    ['ffGift', 'ffTopup', 'ffSubs'].forEach(id => document.getElementById(id).classList.add('hidden'));
+    document.getElementById(opt).classList.remove('hidden');
+    document.querySelectorAll('.option-btn').forEach(b => b.style.borderColor = '#2d3748');
+    btn.style.borderColor = 'var(--primary)';
+};
+
+onAuthStateChanged(auth, (user) => {
+    if(user) {
+        document.getElementById('authModal').style.display = 'none';
+        document.getElementById('mainApp').classList.remove('hidden');
+        get(ref(db, 'users/' + user.uid)).then(snap => {
+            if(snap.exists()){
+                document.getElementById('displayUserName').innerText = snap.val().name;
+                document.getElementById('avatarLetter').innerText = snap.val().name[0].toUpperCase();
             }
-            
-            .store-name {
-                font-size: 2.8rem;
-            }
-            
-            .message {
-                font-size: 1.5rem;
-            }
-            
-            .whatsapp-button {
-                font-size: 1.5rem;
-                min-width: 300px;
-                padding: 18px 30px;
-            }
-            
-            .phone-number {
-                font-size: 1.5rem;
-            }
-            
-            .warning-icon {
-                font-size: 90px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .maintenance-container {
-                padding: 30px 20px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .store-name {
-                font-size: 2.2rem;
-            }
-            
-            .message {
-                font-size: 1.3rem;
-                padding: 15px;
-            }
-            
-            .whatsapp-button {
-                font-size: 1.3rem;
-                min-width: 250px;
-                padding: 15px 25px;
-            }
-            
-            .phone-number {
-                font-size: 1.3rem;
-                padding: 12px 20px;
-            }
-            
-            .instructions {
-                font-size: 1.1rem;
-            }
-        }
-    </style>
+        });
+    } else {
+        document.getElementById('authModal').style.display = 'flex';
+        document.getElementById('mainApp').classList.add('hidden');
+    }
+});
+</script>
+
+<style>
+:root{ --primary:#00cc66; --bg-dark:#0a0e17; --bg-card:#131a2d; --text-dim:#a0aec0; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+body{background:var(--bg-dark);color:white;padding-bottom:100px;}
+.container{max-width:1200px;margin:0 auto;padding:0 15px;}
+header{background:var(--bg-card);padding:15px 0;border-bottom:3px solid var(--primary);}
+.header-content{display:flex;justify-content:space-between;align-items:center;}
+.logo h1{color:var(--primary);font-size:22px;}
+.user-info{display:flex;align-items:center;gap:10px;}
+.user-avatar{width:35px;height:35px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;}
+.hero{text-align:center;padding:40px 20px;background:linear-gradient(180deg,#131a2d 0%,#0a0e17 100%);border-radius:0 0 20px 20px;margin-bottom:30px;}
+.section-header{border-left:4px solid var(--primary);padding-left:10px;margin:30px 0 20px;}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;}
+.product-card{background:var(--bg-card);border:1px solid #2d3748;border-radius:12px;padding:20px;text-align:center;transition:0.3s;}
+.product-card:hover{border-color:var(--primary);transform:translateY(-3px);}
+.price{color:var(--primary);font-size:24px;font-weight:bold;margin:15px 0;}
+.btn-buy{width:100%;background:var(--primary);color:white;border:none;padding:12px;border-radius:8px;font-weight:bold;cursor:pointer;}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal-content{background:var(--bg-card);padding:25px;border-radius:15px;width:100%;max-width:400px;border:1px solid #2d3748;}
+.pay-method{background:#0a0e17;padding:12px;border-radius:8px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid #2d3748;}
+.pay-input, .auth-input{width:100%;padding:12px;margin-bottom:10px;background:#0a0e17;border:1px solid #2d3748;border-radius:8px;color:white;}
+.options-menu{display:flex;gap:10px;padding-bottom:20px;}
+.option-btn{flex:1;background:#131a2d;padding:12px;border-radius:8px;border:1px solid #2d3748;color:white;cursor:pointer;font-size:14px;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg-card);display:flex;justify-content:space-around;padding:15px;border-top:1px solid #2d3748;}
+.nav-item{text-decoration:none;color:var(--text-dim);font-size:12px;text-align:center;cursor:pointer;}
+.hidden{display:none;}
+.nb-box{font-size:11px; color:var(--text-dim); background:#0a0e17; padding:10px; border-radius:8px; margin-bottom:15px; border-left:3px solid var(--primary);}
+</style>
 </head>
 <body>
-    <div class="maintenance-container">
-        <div class="warning-icon">⚠️</div>
-        
-        <h1>SITE EM MANUTENÇÃO</h1>
-        
-        <span class="store-name">Yanikzx9 Store</span>
-        
-        <div class="message">
-            Estamos realizando melhorias para oferecer uma <span class="highlight">experiência ainda melhor</span> para você!
+
+<div id="authModal" class="modal">
+    <div class="modal-content">
+        <h2 style="color:var(--primary);text-align:center;margin-bottom:20px;">Yanikzx9 Store</h2>
+        <div id="loginForm">
+            <input type="email" id="loginEmail" class="auth-input" placeholder="Seu Email">
+            <input type="password" id="loginPassword" class="auth-input" placeholder="Sua Senha">
+            <button class="btn-buy" onclick="handleLogin()">Entrar na Loja</button>
+            <p style="text-align:center;margin-top:15px;font-size:13px;color:var(--text-dim)">Não tem conta? <a href="#" onclick="toggleAuth()" style="color:var(--primary)">Criar agora</a></p>
         </div>
-        
-        <div class="admin-contact">
-            Para suporte, recarregamentos ou dúvidas, entre em contato diretamente com o <span class="highlight">ADMINISTRADOR</span>
-        </div>
-        
-        <a href="https://wa.me/258840474014" class="whatsapp-button" target="_blank">
-            <i class="fab fa-whatsapp whatsapp-icon"></i>
-            CONTATAR ADMINISTRADOR
-        </a>
-        
-        <div class="phone-number">
-            <i class="fas fa-phone-alt"></i> +258 84 047 4014
-        </div>
-        
-        <div class="instructions">
-            <p>Clique no botão acima para ser redirecionado automaticamente para o WhatsApp do administrador.</p>
-            <p>Envie sua mensagem com detalhes sobre o recarregamento ou problema encontrado.</p>
-        </div>
-        
-        <div class="tools">
-            <div class="tool">🔧</div>
-            <div class="tool">🛠️</div>
-            <div class="tool">⚙️</div>
-            <div class="tool">💻</div>
+        <div id="signupForm" class="hidden">
+            <input type="text" id="signupName" class="auth-input" placeholder="Nome Completo">
+            <input type="email" id="signupEmail" class="auth-input" placeholder="Email">
+            <input type="password" id="signupPassword" class="auth-input" placeholder="Senha">
+            <button class="btn-buy" onclick="handleSignup()">Registrar</button>
         </div>
     </div>
+</div>
 
-    <script>
-        // Adiciona efeito de digitação ao número de telefone
-        document.addEventListener('DOMContentLoaded', function() {
-            const phoneNumber = document.querySelector('.phone-number');
-            const originalText = phoneNumber.textContent;
-            phoneNumber.textContent = '';
-            
-            let i = 0;
-            function typeWriter() {
-                if (i < originalText.length) {
-                    phoneNumber.textContent += originalText.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 50);
-                }
-            }
-            
-            // Inicia o efeito após um breve delay
-            setTimeout(typeWriter, 1000);
-            
-            // Efeito de confirmação ao clicar no botão
-            const whatsappButton = document.querySelector('.whatsapp-button');
-            whatsappButton.addEventListener('click', function() {
-                // Animação de clique
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 200);
-                
-                // Mensagem no console (apenas para demonstração)
-                console.log('Redirecionando para o WhatsApp do administrador...');
-            });
-            
-            // Efeito de piscar no ícone de aviso
-            const warningIcon = document.querySelector('.warning-icon');
-            setInterval(() => {
-                warningIcon.style.textShadow = warningIcon.style.textShadow === '0 0 40px rgba(255, 204, 0, 0.9)' 
-                    ? '0 0 30px rgba(255, 204, 0, 0.7)' 
-                    : '0 0 40px rgba(255, 204, 0, 0.9)';
-            }, 1000);
-        });
-    </script>
+<div id="payModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-bottom:15px;">Finalizar Pagamento</h3>
+        <div id="itemDetail"></div>
+        
+        <div class="pay-method" style="opacity:0.5;">
+            <span>M-Pesa: 840474014</span>
+            <small style="color:#ff4444; font-weight:bold;">Fora de Serviço</small>
+        </div>
+        
+        <div class="pay-method" style="border:1px solid var(--primary); margin-bottom:15px;">
+            <div>
+                <strong>E-Mola: 865672009</strong><br>
+                <small style="color:var(--text-dim)">Nome: Yanik Uaite</small>
+            </div>
+            <span style="color:var(--primary); font-weight:bold;">✔ ATIVO</span>
+        </div>
+
+        <input type="text" id="playerID" class="pay-input" placeholder="ID do Jogador">
+        <input type="text" id="rechargeID" class="pay-input" placeholder="transfira primeiro e coloque o Id de recarga aqui">
+        
+        <div class="nb-box">
+            <strong>NB:</strong> o id geralmente costuma ser 🔖 <em>Referência:</em> PP260202.1306.E76333
+        </div>
+
+        <button class="btn-buy" onclick="confirmPayment()" style="background:#25D366;">Enviar Comprovativo (WhatsApp)</button>
+        <button onclick="document.getElementById('payModal').style.display='none'" style="width:100%;background:none;border:none;color:var(--text-dim);margin-top:10px;cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div id="mainApp" class="hidden">
+    <header>
+        <div class="container header-content">
+            <div class="logo"><h1>Yanikzx9 Store</h1></div>
+            <div class="user-info">
+                <div id="avatarLetter" class="user-avatar">U</div>
+                <div style="text-align:left;">
+                    <div id="displayUserName" style="font-size:13px; font-weight:bold;">Usuário</div>
+                    <button onclick="logout()" style="background:none; border:none; color:var(--text-dim); font-size:11px; cursor:pointer;">Sair</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="hero">
+            <h2>O Rei das Recargas em Moçambique 🔥</h2>
+            <p style="color:var(--text-dim)">Entrega rápida direto na sua conta do jogo.</p>
+        </div>
+
+        <div class="options-menu">
+            <button class="option-btn" id="btnGift" style="border-color:var(--primary)" onclick="switchOption('ffGift', this)">🎁 Gift Cards</button>
+            <button class="option-btn" onclick="switchOption('ffTopup', this)">⚡ Top Up</button>
+            <button class="option-btn" onclick="switchOption('ffSubs', this)">⭐ Assinaturas</button>
+        </div>
+
+        <div id="ffGift" class="products-grid">
+            <div class="product-card"><h4>100 + 10 Diamantes</h4><div class="price">80 MT</div><button class="btn-buy" onclick="openPay('100+10 Dimas','80','Free Fire')">Comprar</button></div>
+            <div class="product-card"><h4>210 + 21 Diamantes</h4><div class="price">140 MT</div><button class="btn-buy" onclick="openPay('210+21 Dimas','140','Free Fire')">Comprar</button></div>
+            <div class="product-card"><h4>530 + 53 Diamantes</h4><div class="price">350 MT</div><button class="btn-buy" onclick="openPay('530+53 Dimas','350','Free Fire')">Comprar</button></div>
+            <div class="product-card"><h4>1080 + 108 Diamantes</h4><div class="price">650 MT</div><button class="btn-buy" onclick="openPay('1080+108 Dimas','650','Free Fire')">Comprar</button></div>
+            <div class="product-card"><h4>2200 + 220 Diamantes</h4><div class="price">1400 MT</div><button class="btn-buy" onclick="openPay('2200+220 Dimas','1400','Free Fire')">Comprar</button></div>
+        </div>
+
+        <div id="ffTopup" class="hidden" style="text-align:center; padding:50px 0; color:var(--text-dim);">⚡ Top Up Direto brevemente...</div>
+        
+        <div id="ffSubs" class="products-grid hidden">
+            <div class="product-card"><h4>Semanal</h4><div class="price">180 MT</div><button class="btn-buy" onclick="openPay('Semanal','180','Free Fire')">Comprar</button></div>
+            <div class="product-card"><h4>Mensal</h4><div class="price">790 MT</div><button class="btn-buy" onclick="openPay('Mensal','790','Free Fire')">Comprar</button></div>
+        </div>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item" style="color:var(--primary)">🏠<br>Loja</a>
+        <a href="https://wa.me/258840474014?text=oie%20yanik,%20gostaria%20de%20ajuda" class="nav-item" target="_blank">💬<br>Suporte</a>
+    </nav>
+</div>
+
 </body>
-</html>
+                </html>
 
