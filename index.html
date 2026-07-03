@@ -1,1107 +1,1489 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yanikzx9 Store — Recargas Oficiais</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCb1O0tPAmk9Kuhgea4ju53IZPyw77FiFI",
-  authDomain: "planning-with-ai-f24a5.firebaseapp.com",
-  databaseURL: "https://planning-with-ai-f24a5-default-rtdb.firebaseio.com",
-  projectId: "planning-with-ai-f24a5",
-  storageBucket: "planning-with-ai-f24a5.firebasestorage.app",
-  messagingSenderId: "310393869088",
-  appId: "1:310393869088:web:f9ee8ad089767c9d5abd45"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const db = getDatabase(app);
-
-window.handleLogin = async () => {
-    const email = document.getElementById('loginEmail').value;
-    const pass = document.getElementById('loginPassword').value;
-    const errEl = document.getElementById('authError');
-    errEl.innerText = '';
-    try { await signInWithEmailAndPassword(auth, email, pass); }
-    catch(e) { errEl.innerText = 'Email ou senha inválidos.'; }
-};
-
-window.handleSignup = async () => {
-    const name = document.getElementById('signupName').value;
-    const email = document.getElementById('signupEmail').value;
-    const pass = document.getElementById('signupPassword').value;
-    if(!name || !email || pass.length < 6) { alert('Preencha todos os campos corretamente'); return; }
-    try {
-        const cred = await createUserWithEmailAndPassword(auth, email, pass);
-        await set(ref(db, 'users/' + cred.user.uid), { name, email, createdAt: new Date().toISOString() });
-    } catch(e) { alert(e.message); }
-};
-
-window.logout = () => signOut(auth);
-
-window.toggleAuth = (mode) => {
-    const loginF = document.getElementById('loginForm');
-    const signupF = document.getElementById('signupForm');
-    const tabLogin = document.getElementById('tabLogin');
-    const tabSignup = document.getElementById('tabSignup');
-    if(mode === 'signup') {
-        loginF.classList.add('hidden'); signupF.classList.remove('hidden');
-        tabLogin.classList.remove('tab-active'); tabSignup.classList.add('tab-active');
-    } else {
-        signupF.classList.add('hidden'); loginF.classList.remove('hidden');
-        tabSignup.classList.remove('tab-active'); tabLogin.classList.add('tab-active');
-    }
-};
-
-let selectedItem = null;
-window.openPay = (name, price, game) => {
-    selectedItem = { name, price, game };
-    document.getElementById('itemDetail').innerHTML = `
-        <div class="pay-summary">
-            <div class="pay-summary-game"><span class="game-badge">${game}</span></div>
-            <div class="pay-summary-info">
-                <span class="pay-pkg-name">${name}</span>
-                <span class="pay-pkg-price">${price} MT</span>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nano Bot - WhatsApp Bot</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🤖</span>
+                    <span class="logo-text">Nano Bot</span>
+                </div>
+                <nav class="nav">
+                    <a href="#planos">Planos</a>
+                    <a href="#features">Funcionalidades</a>
+                    <a href="#contato">Contato</a>
+                    <a href="login.html" class="btn btn-outline">Entrar</a>
+                    <a href="login.html" class="btn btn-primary">Começar</a>
+                </nav>
             </div>
-        </div>`;
-    document.getElementById('playerID').value = '';
-    document.getElementById('rechargeID').value = '';
-    document.getElementById('payModal').style.display = 'flex';
-};
+        </div>
+    </header>
 
-window.confirmPayment = () => {
-    const playerID = document.getElementById('playerID').value.trim();
-    const rechargeID = document.getElementById('rechargeID').value.trim();
-    if(!playerID || !rechargeID) {
-        showToast('Preencha o ID do Jogador e a Referência.', 'error');
-        return;
-    }
-    const phone = "258840474014";
-    const msg = `Olá Yanikzx9! Fiz o pagamento para recarga.\n\n` +
-                `📦 Produto: ${selectedItem.name} (${selectedItem.game})\n` +
-                `💰 Valor: ${selectedItem.price} MT\n` +
-                `🆔 ID Jogador: ${playerID}\n` +
-                `🔑 Referência E-Mola: ${rechargeID}\n` +
-                `👤 Usuário: ${auth.currentUser.email}`;
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
-};
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">⚡ Mais de 500 grupos ativos</div>
+                <h1 class="hero-title">
+                    Automação Inteligente<br>
+                    <span class="gradient-text">para seu WhatsApp</span>
+                </h1>
+                <p class="hero-description">
+                    O Nano Bot protege seu grupo, automatiza tarefas e oferece 
+                    funcionalidades premium para sua comunidade.
+                </p>
+                <div class="hero-buttons">
+                    <a href="login.html" class="btn btn-primary btn-large">
+                        Começar Agora → 
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-window.switchTab = (opt, btn) => {
-    ['ffGift', 'ffTopup', 'ffSubs'].forEach(id => document.getElementById(id).classList.add('hidden'));
-    document.getElementById(opt).classList.remove('hidden');
-    document.querySelectorAll('.tab-opt').forEach(b => b.classList.remove('tab-opt-active'));
-    btn.classList.add('tab-opt-active');
-};
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Funcionalidades</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Anti-Link</h3>
+                    <p>Bloqueia links indesejados automaticamente</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>IA Inteligente</h3>
+                    <p>Responde perguntas automaticamente</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💎</div>
+                    <h3>VIP Múltiplos</h3>
+                    <p>Planos para diferentes necessidades</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Stickers</h3>
+                    <p>Crie stickers personalizados</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-window.showSection = (id) => {
-    ['section-loja','section-perfil','section-suporte'].forEach(s => {
-        const el = document.getElementById(s);
-        if(el) el.classList.add('hidden');
-    });
-    document.getElementById(id)?.classList.remove('hidden');
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('nav-active'));
-    document.querySelector(`[data-nav="${id}"]`)?.classList.add('nav-active');
-};
+    <!-- Planos -->
+    <section class="plans" id="planos">
+        <div class="container">
+            <h2 class="section-title">Escolha seu Plano</h2>
+            <div class="plans-grid">
+                <!-- Plano Ouro -->
+                <div class="plan-card">
+                    <div class="plan-icon">🥇</div>
+                    <h3 class="plan-name">Ouro</h3>
+                    <div class="plan-price">50 MT</div>
+                    <div class="plan-duration">7 dias</div>
+                    <ul class="plan-features">
+                        <li>✅ Anti-Link</li>
+                        <li>✅ Ban/Kick</li>
+                        <li>✅ Comandos básicos</li>
+                        <li>❌ Stickers</li>
+                        <li>❌ Auto-Reply</li>
+                    </ul>
+                    <a href="login.html" class="btn btn-outline btn-block">Contratar</a>
+                </div>
 
-window.showToast = (msg, type = 'info') => {
-    const t = document.getElementById('toast');
-    t.innerText = msg;
-    t.className = `toast toast-${type} show`;
-    setTimeout(() => t.classList.remove('show'), 3000);
-};
+                <!-- Plano Diamante (Popular) -->
+                <div class="plan-card popular">
+                    <div class="popular-badge">Mais Popular</div>
+                    <div class="plan-icon">💎</div>
+                    <h3 class="plan-name">Diamante</h3>
+                    <div class="plan-price">150 MT</div>
+                    <div class="plan-duration">30 dias</div>
+                    <ul class="plan-features">
+                        <li>✅ Anti-Link</li>
+                        <li>✅ Ban/Kick</li>
+                        <li>✅ Promover admins</li>
+                        <li>✅ Stickers</li>
+                        <li>✅ Auto-Reply</li>
+                        <li>✅ Boas-vindas</li>
+                        <li>✅ IA Livre</li>
+                    </ul>
+                    <a href="login.html" class="btn btn-primary btn-block">Contratar</a>
+                </div>
 
-onAuthStateChanged(auth, (user) => {
-    if(user) {
-        document.getElementById('authModal').style.display = 'none';
-        document.getElementById('mainApp').classList.remove('hidden');
-        get(ref(db, 'users/' + user.uid)).then(snap => {
-            if(snap.exists()){
-                const data = snap.val();
-                document.getElementById('displayUserName').innerText = data.name;
-                document.getElementById('avatarLetter').innerText = data.name[0].toUpperCase();
-                document.getElementById('profileName').innerText = data.name;
-                document.getElementById('profileEmail').innerText = data.email;
-                document.getElementById('profileAvatar').innerText = data.name[0].toUpperCase();
-            }
-        });
-    } else {
-        document.getElementById('authModal').style.display = 'flex';
-        document.getElementById('mainApp').classList.add('hidden');
-    }
-});
-</script>
+                <!-- Plano Lenda -->
+                <div class="plan-card">
+                    <div class="plan-icon">👑</div>
+                    <h3 class="plan-name">Lenda</h3>
+                    <div class="plan-price">220 MT</div>
+                    <div class="plan-duration">60 dias</div>
+                    <ul class="plan-features">
+                        <li>✅ Todas do Diamante</li>
+                        <li>✅ Prioridade suporte</li>
+                        <li>✅ Configuração personalizada</li>
+                        <li>✅ Análise de dados</li>
+                        <li>✅ Bot exclusivo</li>
+                    </ul>
+                    <a href="login.html" class="btn btn-outline btn-block">Contratar</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<style>
-/* ===== TOKENS ===== */
-:root {
-  --green: #00e676;
-  --green-dim: #00b854;
-  --green-glow: rgba(0,230,118,0.18);
-  --bg: #080c14;
-  --bg-card: #0f1624;
-  --bg-surface: #161f33;
-  --border: #1e2d47;
-  --text: #e8edf5;
-  --text-dim: #7a8caa;
-  --red: #ff4d4d;
-  --gold: #ffc107;
-  --radius: 14px;
-  --nav-h: 72px;
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <p>💜 Nano Bot - Criado por Yanik Uaite</p>
+                    <p>📱 WhatsApp: 258 834 788 141</p>
+                </div>
+                <div>
+                    <p>© 2024 Nano Bot. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+  </html>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Nano Bot</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">🤖 Nano Bot</div>
+                <h1>Bem-vindo de volta</h1>
+                <p>Entre para acessar seu dashboard</p>
+            </div>
+
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+            </form>
+
+            <div class="auth-divider">ou</div>
+
+            <div class="auth-links">
+                <p>Não tem uma conta? <a href="#" id="showRegister">Cadastre-se</a></p>
+                <p><a href="#">Esqueceu a senha?</a></p>
+            </div>
+
+            <div class="auth-demo">
+                <p class="demo-text">🔑 Demo:</p>
+                <div class="demo-credentials">
+                    <span>Email: <strong>cliente@demo.com</strong></span>
+                    <span>Senha: <strong>123456</strong></span>
+                </div>
+                <button onclick="demoLogin()" class="btn btn-outline btn-sm">Entrar como Demo</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Nano Bot</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <span>🤖</span>
+                <span>Nano Bot</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="active">
+                    <span>📊</span> Dashboard
+                </a>
+                <a href="#">
+                    <span>🤖</span> Meus Bots
+                </a>
+                <a href="#">
+                    <span>⚙️</span> Configurações
+                </a>
+                <a href="login.html" class="logout">
+                    <span>🚪</span> Sair
+                </a>
+            </nav>
+            <div class="sidebar-user">
+                <div class="user-info">
+                    <span class="user-avatar">👤</span>
+                    <div>
+                        <p class="user-name">João Silva</p>
+                        <p class="user-role">Cliente</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Meu Nano Bot 🤖</h1>
+                <button class="btn btn-primary" id="newBotBtn">+ Contratar Plano</button>
+            </header>
+
+            <!-- Status Card -->
+            <div class="status-card">
+                <div class="status-grid">
+                    <div class="status-item">
+                        <span class="status-label">Status</span>
+                        <span class="status-value active">🟢 Ativo</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Plano</span>
+                        <span class="status-value">💎 Diamante</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Expira em</span>
+                        <span class="status-value">25 dias</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Número do Bot</span>
+                        <span class="status-value">258 84 123 4567</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bots List -->
+            <div class="bots-section">
+                <div class="bots-header">
+                    <h2>Seus Bots</h2>
+                </div>
+                
+                <div class="bot-card">
+                    <div class="bot-header">
+                        <div>
+                            <span class="bot-status active"></span>
+                            <span class="bot-name">🤖 Nano Bot - Grupo VIP</span>
+                        </div>
+                        <span class="bot-plan">💎 Diamante</span>
+                    </div>
+                    <div class="bot-details">
+                        <div class="bot-info">
+                            <span>📱 Número: 258 84 123 4567</span>
+                            <span>⏳ Expira: 24/01/2025</span>
+                            <span>📊 Mensagens: 1,234</span>
+                        </div>
+                        <div class="bot-actions">
+                            <button class="btn btn-sm btn-outline">🔄 Renovar</button>
+                            <button class="btn btn-sm btn-outline">📊 Estatísticas</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bot-card">
+                    <div class="bot-header">
+                        <div>
+                            <span class="bot-status pending"></span>
+                            <span class="bot-name">🤖 Nano Bot - Empresa</span>
+                        </div>
+                        <span class="bot-plan">🥇 Ouro</span>
+                    </div>
+                    <div class="bot-details">
+                        <div class="bot-info">
+                            <span>📱 Número: 258 82 987 6543</span>
+                            <span>⏳ Expira: 10/01/2025</span>
+                            <span>📊 Mensagens: 45</span>
+                        </div>
+                        <div class="bot-actions">
+                            <button class="btn btn-sm btn-primary">🔗 Configurar</button>
+                            <button class="btn btn-sm btn-outline">📊 Estatísticas</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instruções -->
+            <div class="instructions-card">
+                <h3>📋 Como Ativar seu Bot</h3>
+                <div class="steps">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <div>
+                            <h4>Adicione o número do bot</h4>
+                            <p>Adicione <strong>258 84 047 4014</strong> no seu grupo</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <div>
+                            <h4>Contacte o admin</h4>
+                            <p>Avise no WhatsApp: <strong>258 834 788 141</strong></p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <div>
+                            <h4>Pronto!</h4>
+                            <p>Seu bot vai começar a funcionar automaticamente</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Contratar Plano -->
+    <div class="modal" id="newBotModal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>🤖 Contratar Plano</h2>
+            <form id="newBotForm">
+                <div class="form-group">
+                    <label>Escolha o Plano</label>
+                    <select>
+                        <option value="OURO">🥇 Ouro - 50 MT / 7 dias</option>
+                        <option value="DIAMANTE" selected>💎 Diamante - 150 MT / 30 dias</option>
+                        <option value="LENDA">👑 Lenda - 220 MT / 60 dias</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Seu WhatsApp</label>
+                    <input type="tel" placeholder="258 84 123 4567">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">💰 Contratar Agora</button>
+                <p class="form-footer">Você receberá as instruções de pagamento via WhatsApp</p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Nano Bot</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar Admin -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <span>👑</span>
+                <span>Nano Bot Admin</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="active">
+                    <span>📊</span> Dashboard
+                </a>
+                <a href="#">
+                    <span>📋</span> Pedidos
+                </a>
+                <a href="#">
+                    <span>🤖</span> Bots Ativos
+                </a>
+                <a href="#">
+                    <span>💬</span> Conversas
+                </a>
+                <a href="#">
+                    <span>⚙️</span> Configurações
+                </a>
+                <a href="login.html" class="logout">
+                    <span>🚪</span> Sair
+                </a>
+            </nav>
+            <div class="sidebar-user">
+                <div class="user-info">
+                    <span class="user-avatar">👑</span>
+                    <div>
+                        <p class="user-name">Administrador</p>
+                        <p class="user-role">Admin</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <h1>👑 Painel de Administração</h1>
+            </header>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">157</div>
+                    <div class="stat-label">Total Clientes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">89</div>
+                    <div class="stat-label">Bots Ativos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Pendentes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">R$ 8.450</div>
+                    <div class="stat-label">Receita Total</div>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filter-bar">
+                <button class="filter-btn active">Todos</button>
+                <button class="filter-btn">⏳ Pendentes</button>
+                <button class="filter-btn">💳 Pago</button>
+                <button class="filter-btn">📱 Instruções</button>
+                <button class="filter-btn">🟢 Ativos</button>
+                <button class="filter-btn">🔴 Expirados</button>
+            </div>
+
+            <!-- Orders List -->
+            <div class="orders-list">
+                <!-- Pedido 1 -->
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <span class="order-status paid">💳 Pago</span>
+                            <span class="order-id">#SUB-005</span>
+                        </div>
+                        <span class="order-plan">💎 Diamante</span>
+                    </div>
+                    <div class="order-body">
+                        <div class="order-client">
+                            <strong>João Silva</strong>
+                            <span>📱 258 84 123 4567</span>
+                            <span>📅 25/12/2024</span>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-sm btn-blue">📱 Enviar Instruções</button>
+                            <button class="btn btn-sm btn-green">✅ Ativar VIP</button>
+                            <button class="btn btn-sm btn-outline">📝 Anotar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pedido 2 -->
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <span class="order-status instructed">📱 Instruções</span>
+                            <span class="order-id">#SUB-006</span>
+                        </div>
+                        <span class="order-plan">🥇 Ouro</span>
+                    </div>
+                    <div class="order-body">
+                        <div class="order-client">
+                            <strong>Maria Santos</strong>
+                            <span>📱 258 82 987 6543</span>
+                            <span>📅 24/12/2024</span>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-sm btn-green">✅ Ativar VIP</button>
+                            <button class="btn btn-sm btn-blue">📱 Reenviar</button>
+                            <button class="btn btn-sm btn-outline">📝 Anotar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pedido 3 -->
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <span class="order-status active">🟢 Ativo</span>
+                            <span class="order-id">#SUB-007</span>
+                        </div>
+                        <span class="order-plan">👑 Lenda</span>
+                    </div>
+                    <div class="order-body">
+                        <div class="order-client">
+                            <strong>Carlos Pereira</strong>
+                            <span>📱 258 85 321 7890</span>
+                            <span>📅 20/12/2024</span>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn btn-sm btn-outline">📊 Ver</button>
+                            <button class="btn btn-sm btn-outline">📝 Anotar</button>
+                            <span class="bot-status-badge">🟢 Conectado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+    --primary: #8B5CF6;
+    --primary-dark: #7C3AED;
+    --secondary: #EC4899;
+    --background: #0F0F1A;
+    --card-bg: #1A1A2E;
+    --border: #2D2D44;
+    --text: #FFFFFF;
+    --text-secondary: #A0AEC0;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+}
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
-  padding-bottom: calc(var(--nav-h) + 16px);
-  min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
 }
 
-/* ===== SCROLLBAR ===== */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-/* ===== AUTH MODAL ===== */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.92);
-  z-index: 200;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  backdrop-filter: blur(6px);
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
-.modal-box {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  width: 100%;
-  max-width: 390px;
-  overflow: hidden;
+/* ========== HEADER ========== */
+.header {
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--background);
+    z-index: 100;
 }
 
-/* Auth Logo */
-.auth-logo {
-  background: linear-gradient(135deg, #0f1624 0%, #0a0f1e 100%);
-  padding: 32px 24px 20px;
-  text-align: center;
-  position: relative;
-  border-bottom: 1px solid var(--border);
-}
-
-.auth-logo-icon {
-  width: 64px;
-  height: 64px;
-  background: linear-gradient(135deg, var(--green), var(--green-dim));
-  border-radius: 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-  box-shadow: 0 0 24px var(--green-glow);
-}
-
-.auth-logo-icon svg { width: 34px; height: 34px; }
-
-.auth-logo h1 {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: #fff;
-}
-
-.auth-logo h1 span { color: var(--green); }
-.auth-logo p { color: var(--text-dim); font-size: 13px; margin-top: 4px; }
-
-/* Auth tabs */
-.auth-tabs {
-  display: flex;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-}
-.auth-tab {
-  flex: 1;
-  padding: 14px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-dim);
-  cursor: pointer;
-  border: none;
-  background: none;
-  transition: 0.2s;
-  border-bottom: 2px solid transparent;
-}
-.auth-tab.tab-active { color: var(--green); border-bottom-color: var(--green); }
-
-.auth-body { padding: 24px; }
-
-.auth-input {
-  width: 100%;
-  padding: 13px 16px;
-  margin-bottom: 12px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  font-size: 14px;
-  transition: border-color 0.2s;
-  outline: none;
-}
-.auth-input:focus { border-color: var(--green); }
-.auth-input::placeholder { color: var(--text-dim); }
-
-#authError { color: var(--red); font-size: 13px; margin-bottom: 10px; min-height: 18px; }
-
-/* ===== BUTTONS ===== */
-.btn {
-  display: block;
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
-  text-align: center;
-}
-.btn-green {
-  background: linear-gradient(135deg, var(--green) 0%, var(--green-dim) 100%);
-  color: #000;
-  box-shadow: 0 4px 16px var(--green-glow);
-}
-.btn-green:hover { filter: brightness(1.1); transform: translateY(-1px); }
-.btn-ghost { background: none; color: var(--text-dim); font-size: 13px; padding: 8px; }
-
-/* ===== HEADER ===== */
-header {
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.header-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 24px;
+    font-weight: 800;
 }
 
-.logo-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--green), var(--green-dim));
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 14px var(--green-glow);
-  flex-shrink: 0;
-}
-.logo-icon svg { width: 22px; height: 22px; }
+.logo-icon { font-size: 28px; }
+.logo-text { background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-.logo-text { line-height: 1; }
-.logo-name {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: #fff;
-}
-.logo-name span { color: var(--green); }
-.logo-sub { font-size: 10px; color: var(--text-dim); letter-spacing: 1.5px; text-transform: uppercase; }
-
-.header-user {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
-.avatar {
-  width: 38px;
-  height: 38px;
-  background: linear-gradient(135deg, var(--green), var(--green-dim));
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 700;
-  font-size: 17px;
-  color: #000;
-  flex-shrink: 0;
+.nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 14px;
 }
 
-.header-name { font-size: 13px; font-weight: 600; color: var(--text); }
-.btn-logout {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s;
+.nav a:hover { color: var(--text); }
+
+/* ========== BUTTONS ========== */
+.btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
 }
-.btn-logout:hover { border-color: var(--red); color: var(--red); }
 
-/* ===== MAIN CONTENT ===== */
-.container { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+}
 
-/* ===== HERO ===== */
+.btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+
+.btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-outline:hover { background: var(--card-bg); }
+
+.btn-large {
+    padding: 16px 32px;
+    font-size: 18px;
+}
+
+.btn-block { width: 100%; text-align: center; }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+.btn-green { background: var(--success); color: white; }
+.btn-blue { background: #3B82F6; color: white; }
+
+/* ========== HERO ========== */
 .hero {
-  padding: 32px 16px 24px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+    padding: 140px 0 80px;
+    text-align: center;
 }
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -60px; left: 50%; transform: translateX(-50%);
-  width: 400px; height: 200px;
-  background: radial-gradient(ellipse, rgba(0,230,118,0.12) 0%, transparent 70%);
-  pointer-events: none;
-}
+
 .hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--green-glow);
-  border: 1px solid rgba(0,230,118,0.3);
-  color: var(--green);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 5px 12px;
-  border-radius: 20px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-}
-.hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; display: inline-block; animation: pulse 1.5s infinite; }
-
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-.hero h2 {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 30px;
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
-}
-.hero h2 em { color: var(--green); font-style: normal; }
-.hero p { color: var(--text-dim); font-size: 14px; }
-
-/* ===== STATS BAR ===== */
-.stats-bar {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin: 20px 0 28px;
-}
-.stat-item {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 10px;
-  text-align: center;
-}
-.stat-num { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: var(--green); }
-.stat-lbl { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-
-/* ===== SECTION LABEL ===== */
-.section-label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-  margin-top: 4px;
-}
-.section-label-line { flex: 1; height: 1px; background: var(--border); }
-.section-label span { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
-
-/* ===== GAME TABS ===== */
-.game-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-}
-.game-tabs::-webkit-scrollbar { height: 0; }
-
-.tab-opt {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 10px 18px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  color: var(--text-dim);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: 0.2s;
-  flex-shrink: 0;
-}
-.tab-opt:hover { border-color: var(--green); color: var(--text); }
-.tab-opt-active {
-  background: var(--green-glow);
-  border-color: var(--green);
-  color: var(--green);
-}
-.tab-opt .tab-icon { font-size: 16px; }
-
-/* ===== PRODUCTS GRID ===== */
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 14px;
+    display: inline-block;
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--primary);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-bottom: 20px;
 }
 
-.product-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px 14px 14px;
-  text-align: center;
-  transition: 0.25s;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.product-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--green), transparent);
-  opacity: 0;
-  transition: 0.25s;
-}
-.product-card:hover {
-  border-color: var(--green);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 28px rgba(0,0,0,0.4);
-}
-.product-card:hover::before { opacity: 1; }
-
-.card-gem {
-  font-size: 28px;
-  margin-bottom: 10px;
-  display: block;
-  filter: drop-shadow(0 0 8px var(--green-glow));
+.hero-title {
+    font-size: 56px;
+    font-weight: 800;
+    margin-bottom: 20px;
 }
 
-.card-name {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 4px;
-  line-height: 1.2;
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
-.card-bonus { font-size: 11px; color: var(--green); font-weight: 600; margin-bottom: 10px; }
-.card-price {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--green);
-  margin-bottom: 12px;
-}
-.card-price small { font-size: 13px; font-weight: 500; color: var(--text-dim); }
 
-.btn-buy {
-  width: 100%;
-  padding: 10px;
-  background: linear-gradient(135deg, var(--green), var(--green-dim));
-  color: #000;
-  border: none;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.2s;
-  letter-spacing: 0.3px;
+.hero-description {
+    color: var(--text-secondary);
+    font-size: 20px;
+    max-width: 600px;
+    margin: 0 auto 32px;
 }
-.btn-buy:hover { filter: brightness(1.1); }
 
-/* ===== COMING SOON ===== */
-.coming-soon {
-  background: var(--bg-card);
-  border: 1px dashed var(--border);
-  border-radius: var(--radius);
-  padding: 50px 20px;
-  text-align: center;
-  color: var(--text-dim);
+.hero-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
-.coming-soon .cs-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.5; }
-.coming-soon p { font-size: 14px; }
 
-/* ===== PAY MODAL ===== */
-#payModal .modal-box { max-width: 420px; }
-
-.modal-header {
-  padding: 20px 20px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
+/* ========== FEATURES ========== */
+.section-title {
+    font-size: 36px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 48px;
 }
-.modal-header h3 { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; }
+
+.features {
+    padding: 80px 0;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+}
+
+.feature-card {
+    background: var(--card-bg);
+    padding: 32px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.feature-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+}
+
+.feature-icon { font-size: 40px; margin-bottom: 16px; }
+.feature-card h3 { font-size: 20px; margin-bottom: 8px; }
+.feature-card p { color: var(--text-secondary); font-size: 14px; }
+
+/* ========== PLANS ========== */
+.plans {
+    padding: 80px 0;
+}
+
+.plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.plan-card {
+    background: var(--card-bg);
+    padding: 32px 24px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.plan-card:hover { transform: translateY(-4px); }
+.plan-card.popular { border-color: var(--primary); }
+
+.popular-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.plan-icon { font-size: 48px; margin-bottom: 8px; }
+.plan-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.plan-price { font-size: 32px; font-weight: 700; color: var(--primary); }
+.plan-duration { color: var(--text-secondary); font-size: 14px; margin-bottom: 16px; }
+
+.plan-features {
+    list-style: none;
+    text-align: left;
+    margin: 16px 0;
+    padding: 0;
+}
+
+.plan-features li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* ========== FOOTER ========== */
+.footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    margin-top: 40px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-secondary);
+    font-size: 14px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+/* ========== AUTH PAGE ========== */
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--background);
+}
+
+.auth-container { width: 100%; max-width: 400px; padding: 20px; }
+.auth-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 40px;
+    border: 1px solid var(--border);
+}
+
+.auth-header { text-align: center; margin-bottom: 32px; }
+.auth-logo { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+.auth-header h1 { font-size: 24px; }
+.auth-header p { color: var(--text-secondary); }
+
+.auth-form { display: flex; flex-direction: column; gap: 16px; }
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.form-group input,
+.form-group select {
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--background);
+    color: var(--text);
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.auth-divider {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 20px 0;
+    position: relative;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: var(--border);
+}
+
+.auth-divider span {
+    background: var(--card-bg);
+    padding: 0 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.auth-links {
+    text-align: center;
+    margin-top: 16px;
+}
+
+.auth-links p { color: var(--text-secondary); font-size: 14px; }
+.auth-links a { color: var(--primary); text-decoration: none; }
+.auth-links a:hover { text-decoration: underline; }
+
+.auth-demo {
+    margin-top: 24px;
+    padding: 16px;
+    background: rgba(139, 92, 246, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.demo-text { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+.demo-credentials {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.demo-credentials strong { color: var(--text); }
+
+/* ========== DASHBOARD ========== */
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 240px;
+    background: var(--card-bg);
+    border-right: 1px solid var(--border);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-brand {
+    font-size: 20px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 32px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.sidebar-nav a {
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s;
+    font-size: 14px;
+}
+
+.sidebar-nav a:hover {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--text);
+}
+
+.sidebar-nav a.active {
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--primary);
+}
+
+.sidebar-nav .logout {
+    margin-top: auto;
+    color: var(--danger);
+}
+
+.sidebar-nav .logout:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.sidebar-user {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    margin-top: 16px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(139, 92, 246, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.user-name { font-weight: 600; font-size: 14px; }
+.user-role { font-size: 12px; color: var(--text-secondary); }
+
+.main-content {
+    margin-left: 240px;
+    flex: 1;
+    padding: 24px 32px;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.main-header h1 { font-size: 28px; }
+
+/* Status Card */
+.status-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    margin-bottom: 32px;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.status-label { color: var(--text-secondary); font-size: 14px; }
+.status-value { font-weight: 600; font-size: 16px; }
+.status-value.active { color: var(--success); }
+
+/* Bot Card */
+.bots-section { margin-bottom: 32px; }
+.bots-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.bot-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+}
+
+.bot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.bot-status {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.bot-status.active { background: var(--success); }
+.bot-status.pending { background: var(--warning); }
+.bot-status.expired { background: var(--danger); }
+
+.bot-name { font-weight: 600; }
+.bot-plan { font-size: 14px; color: var(--primary); }
+
+.bot-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.bot-info {
+    display: flex;
+    gap: 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+
+.bot-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Instructions */
+.instructions-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid var(--border);
+}
+
+.instructions-card h3 { margin-bottom: 16px; }
+
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.step h4 { margin-bottom: 4px; }
+.step p { color: var(--text-secondary); font-size: 14px; }
+
+/* Admin Stats */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    text-align: center;
+}
+
+.stat-number { font-size: 28px; font-weight: 700; }
+.stat-label { color: var(--text-secondary); font-size: 14px; }
+
+.filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 13px;
+}
+
+.filter-btn:hover { background: var(--card-bg); }
+.filter-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.order-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--border);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.order-status {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.order-status.paid { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
+.order-status.instructed { background: rgba(99, 102, 241, 0.2); color: #6366F1; }
+.order-status.active { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+.order-status.pending { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+.order-status.expired { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+
+.order-id { font-size: 12px; color: var(--text-secondary); }
+.order-plan { font-weight: 600; }
+
+.order-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.order-client {
+    display: flex;
+    gap: 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+
+.order-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.bot-status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ========== MODAL ========== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.show { display: flex; }
+
+.modal-content {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 480px;
+    width: 100%;
+    border: 1px solid var(--border);
+    position: relative;
+}
+
 .modal-close {
-  width: 30px; height: 30px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text-dim);
-  cursor: pointer;
-  font-size: 16px;
-  display: flex; align-items: center; justify-content: center;
-  transition: 0.2s;
-}
-.modal-close:hover { border-color: var(--red); color: var(--red); }
-
-.modal-body { padding: 18px 20px; }
-
-.pay-summary {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.game-badge {
-  background: var(--green-glow);
-  border: 1px solid rgba(0,230,118,0.3);
-  color: var(--green);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 6px;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-}
-.pay-summary-info { flex: 1; }
-.pay-pkg-name { display: block; font-size: 14px; font-weight: 600; }
-.pay-pkg-price { display: block; font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; color: var(--green); }
-
-/* Pay methods */
-.pay-methods { margin-bottom: 16px; }
-.pay-method-label { font-size: 11px; font-weight: 600; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
-
-.pay-method {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-.pay-method.active { border-color: var(--green); background: var(--green-glow); }
-.pay-method.inactive { opacity: 0.45; }
-
-.pm-info strong { font-size: 14px; font-weight: 600; }
-.pm-info small { display: block; font-size: 12px; color: var(--text-dim); margin-top: 2px; }
-
-.pm-badge {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 5px;
-  letter-spacing: 0.5px;
-}
-.pm-badge.on { background: rgba(0,230,118,0.15); color: var(--green); }
-.pm-badge.off { background: rgba(255,77,77,0.12); color: var(--red); }
-
-/* Pay inputs */
-.pay-input {
-  width: 100%;
-  padding: 13px 14px;
-  margin-bottom: 10px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.pay-input:focus { border-color: var(--green); }
-.pay-input::placeholder { color: var(--text-dim); }
-
-.info-box {
-  background: rgba(0,230,118,0.06);
-  border: 1px solid rgba(0,230,118,0.2);
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 12px;
-  color: var(--text-dim);
-  margin-bottom: 14px;
-  line-height: 1.5;
-}
-.info-box strong { color: var(--green); }
-
-/* ===== PROFILE SECTION ===== */
-.profile-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-  text-align: center;
-  margin-bottom: 16px;
-}
-.profile-avatar-lg {
-  width: 72px; height: 72px;
-  background: linear-gradient(135deg, var(--green), var(--green-dim));
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 32px; font-weight: 700; color: #000;
-  margin: 0 auto 14px;
-  box-shadow: 0 0 24px var(--green-glow);
-}
-.profile-name-lg { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; }
-.profile-email-lg { color: var(--text-dim); font-size: 13px; margin-top: 4px; }
-
-.info-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 16px;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-.info-row span:first-child { color: var(--text-dim); }
-.info-row span:last-child { font-weight: 600; }
-
-/* ===== SUPPORT SECTION ===== */
-.support-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  text-decoration: none;
-  color: var(--text);
-  transition: 0.2s;
-}
-.support-card:hover { border-color: var(--green); transform: translateX(4px); }
-.support-icon {
-  width: 46px; height: 46px;
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
-  flex-shrink: 0;
-}
-.support-icon.green { background: rgba(0,230,118,0.12); }
-.support-info strong { font-size: 15px; font-weight: 600; display: block; }
-.support-info small { color: var(--text-dim); font-size: 13px; }
-.support-arrow { margin-left: auto; color: var(--text-dim); font-size: 18px; }
-
-/* ===== BOTTOM NAV ===== */
-.bottom-nav {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  height: var(--nav-h);
-  background: var(--bg-card);
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  z-index: 100;
-  backdrop-filter: blur(12px);
-  padding: 0 8px;
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.3s;
 }
 
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  padding: 8px 16px;
-  border-radius: 12px;
-  transition: 0.2s;
-  text-decoration: none;
-  color: var(--text-dim);
-  border: none;
-  background: none;
-  min-width: 60px;
-}
-.nav-item:hover { color: var(--text); }
-.nav-item.nav-active {
-  color: var(--green);
-  background: var(--green-glow);
+.modal-close:hover { color: var(--text); }
+
+.modal-content h2 { margin-bottom: 20px; }
+
+.form-footer {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 12px;
 }
 
-.nav-icon {
-  font-size: 22px;
-  line-height: 1;
-  transition: transform 0.2s;
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .hero-title { font-size: 32px; }
+    .section-title { font-size: 28px; }
+    
+    .sidebar {
+        width: 200px;
+        padding: 16px;
+    }
+    
+    .main-content {
+        margin-left: 200px;
+        padding: 16px;
+    }
+    
+    .plan-card { padding: 24px 16px; }
+    .status-grid { grid-template-columns: 1fr 1fr; }
+    .bot-details { flex-direction: column; align-items: stretch; }
+    .bot-actions { justify-content: center; }
+    
+    .order-body { flex-direction: column; align-items: stretch; }
+    .order-actions { justify-content: center; }
+    .order-client { justify-content: center; }
 }
-.nav-item.nav-active .nav-icon { transform: scale(1.15); }
-.nav-label { font-size: 10px; font-weight: 600; letter-spacing: 0.3px; }
 
-/* ===== TOAST ===== */
-.toast {
-  position: fixed;
-  top: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 12px 20px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  z-index: 500;
-  transition: top 0.3s ease;
-  white-space: nowrap;
+@media (max-width: 576px) {
+    .sidebar { display: none; }
+    .main-content { margin-left: 0; }
+    
+    .nav { display: none; }
+    .header-content { justify-content: center; }
+    
+    .plans-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .status-grid { grid-template-columns: 1fr; }
+    
+    .hero { padding: 120px 0 40px; }
+    .auth-card { padding: 24px; }
 }
-.toast.show { top: 16px; }
-.toast.toast-error { border-color: var(--red); color: var(--red); }
-.toast.toast-success { border-color: var(--green); color: var(--green); }
+// ========== MODAL ==========
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('newBotModal');
+    const btn = document.getElementById('newBotBtn');
+    const close = document.querySelector('.modal-close');
 
-.hidden { display: none !important; }
-</style>
-</head>
-<body>
+    if (btn) {
+        btn.onclick = function() {
+            if (modal) modal.classList.add('show');
+        };
+    }
 
-<div id="toast" class="toast"></div>
+    if (close) {
+        close.onclick = function() {
+            if (modal) modal.classList.remove('show');
+        };
+    }
 
-<!-- ===== AUTH MODAL ===== -->
-<div id="authModal" class="modal" style="display:flex;">
-  <div class="modal-box">
-    <div class="auth-logo">
-      <div class="auth-logo-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-        </svg>
-      </div>
-      <h1>Yanikzx9 <span>Store</span></h1>
-      <p>Recargas oficiais para os seus jogos favoritos</p>
-    </div>
-    <div class="auth-tabs">
-      <button id="tabLogin" class="auth-tab tab-active" onclick="toggleAuth('login')">Entrar</button>
-      <button id="tabSignup" class="auth-tab" onclick="toggleAuth('signup')">Criar Conta</button>
-    </div>
-    <div class="auth-body">
-      <div id="loginForm">
-        <div id="authError"></div>
-        <input type="email" id="loginEmail" class="auth-input" placeholder="Seu email">
-        <input type="password" id="loginPassword" class="auth-input" placeholder="Sua senha">
-        <button class="btn btn-green" onclick="handleLogin()">Entrar na Loja</button>
-      </div>
-      <div id="signupForm" class="hidden">
-        <input type="text" id="signupName" class="auth-input" placeholder="Nome completo">
-        <input type="email" id="signupEmail" class="auth-input" placeholder="Email">
-        <input type="password" id="signupPassword" class="auth-input" placeholder="Senha (mín. 6 caracteres)">
-        <button class="btn btn-green" onclick="handleSignup()">Criar Conta</button>
-      </div>
-    </div>
-  </div>
-</div>
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.classList.remove('show');
+        }
+    };
+});
 
-<!-- ===== PAY MODAL ===== -->
-<div id="payModal" class="modal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3>Finalizar Compra</h3>
-      <button class="modal-close" onclick="document.getElementById('payModal').style.display='none'">✕</button>
-    </div>
-    <div class="modal-body">
-      <div id="itemDetail"></div>
+// ========== LOGIN DEMO ==========
+function demoLogin() {
+    alert('🔑 Logado como cliente demo!\n\nEmail: cliente@demo.com');
+    window.location.href = 'dashboard.html';
+}
 
-      <div class="pay-methods">
-        <div class="pay-method-label">Método de Pagamento</div>
-        <div class="pay-method inactive">
-          <div class="pm-info">
-            <strong>M-Pesa · 840474014</strong>
-            <small>Yanik Uaite</small>
-          </div>
-          <span class="pm-badge off">Fora de Serviço</span>
-        </div>
-        <div class="pay-method active">
-          <div class="pm-info">
-            <strong>E-Mola · 865672009</strong>
-            <small>Yanik Uaite</small>
-          </div>
-          <span class="pm-badge on">✔ Ativo</span>
-        </div>
-      </div>
+// ========== ADMIN DEMO ==========
+function adminLogin() {
+    alert('👑 Logado como administrador!\n\nEmail: admin@demo.com');
+    window.location.href = 'admin.html';
+}
 
-      <input type="text" id="playerID" class="pay-input" placeholder="ID do Jogador no jogo">
-      <input type="text" id="rechargeID" class="pay-input" placeholder="Referência da transferência E-Mola">
+// ========== FORM LOGIN ==========
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            
+            if (email.includes('admin')) {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'dashboard.html';
+            }
+        });
+    }
+});
 
-      <div class="info-box">
-        <strong>Como encontrar a referência?</strong><br>
-        Após transferir, procure no SMS ou app E-Mola por algo como:<br>
-        <code style="color:var(--text)">PP260202.1306.E76333</code>
-      </div>
+// ========== FILTER BUTTONS ==========
+document.addEventListener('DOMContentLoaded', function() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+});
 
-      <button class="btn btn-green" onclick="confirmPayment()" style="background:linear-gradient(135deg,#25D366,#1da851);">
-        📲 Enviar Comprovativo via WhatsApp
-      </button>
-      <button class="btn btn-ghost" onclick="document.getElementById('payModal').style.display='none'">Cancelar</button>
-    </div>
-  </div>
-</div>
+// ========== PLANO SELECT ==========
+document.addEventListener('DOMContentLoaded', function() {
+    const planSelect = document.querySelector('select');
+    const formFooter = document.querySelector('.form-footer');
+    
+    if (planSelect) {
+        const prices = {
+            'OURO': '50 MT',
+            'DIAMANTE': '150 MT',
+            'LENDA': '220 MT'
+        };
+        
+        planSelect.addEventListener('change', function() {
+            const value = this.value;
+            if (formFooter) {
+                formFooter.textContent = `💰 Valor: ${prices[value]} - Você receberá as instruções de pagamento via WhatsApp`;
+            }
+        });
+    }
+});
 
-<!-- ===== MAIN APP ===== -->
-<div id="mainApp" class="hidden">
+// ========== BOTÕES DE AÇÃO ==========
+document.addEventListener('DOMContentLoaded', function() {
+    // Enviar instruções
+    document.querySelectorAll('.btn-blue').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (confirm('📱 Enviar instruções para o cliente via WhatsApp?')) {
+                alert('✅ Instruções enviadas com sucesso!');
+                this.textContent = '✅ Enviado';
+                this.disabled = true;
+            }
+        });
+    });
 
-  <header>
-    <div class="header-inner">
-      <div class="logo">
-        <div class="logo-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-          </svg>
-        </div>
-        <div class="logo-text">
-          <div class="logo-name">Yanikzx9 <span>Store</span></div>
-          <div class="logo-sub">Recargas Oficiais</div>
-        </div>
-      </div>
-      <div class="header-user">
-        <div id="avatarLetter" class="avatar">U</div>
-        <div>
-          <div id="displayUserName" class="header-name">Usuário</div>
-          <button onclick="logout()" class="btn-logout">Sair</button>
-        </div>
-      </div>
-    </div>
-  </header>
+    // Ativar VIP
+    document.querySelectorAll('.btn-green').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (confirm('✅ Confirmar ativação do VIP para este cliente?')) {
+                alert('🎉 VIP ativado com sucesso! Cliente notificado.');
+                this.textContent = '✅ Ativado';
+                this.disabled = true;
+            }
+        });
+    });
+});
 
-  <main class="container">
+// ========== CONTRATAR PLANO ==========
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('newBotForm');
+    
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('✅ Pedido criado com sucesso!\n\nVocê receberá as instruções de pagamento via WhatsApp.\n\n📱 Número do Admin: 258 834 788 141');
+            
+            const modal = document.getElementById('newBotModal');
+            if (modal) modal.classList.remove('show');
+        });
+    }
+});
 
-    <!-- LOJA SECTION -->
-    <div id="section-loja">
-      <div class="hero">
-        <div class="hero-badge">🇲🇿 Moçambique · Online agora</div>
-        <h2>O Rei das <em>Recargas</em><br>em Moçambique 🔥</h2>
-        <p>Entrega rápida direto na sua conta do jogo.</p>
-      </div>
+// ========== SCROLL SMOOTH ==========
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+});
 
-      <div class="stats-bar">
-        <div class="stat-item">
-          <div class="stat-num">+500</div>
-          <div class="stat-lbl">Clientes</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">&lt;5min</div>
-          <div class="stat-lbl">Entrega</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">24/7</div>
-          <div class="stat-lbl">Suporte</div>
-        </div>
-      </div>
-
-      <div class="section-label">
-        <div class="section-label-line"></div>
-        <span>Free Fire</span>
-        <div class="section-label-line"></div>
-      </div>
-
-      <div class="game-tabs">
-        <button class="tab-opt tab-opt-active" onclick="switchTab('ffGift', this)">
-          <span class="tab-icon">🎁</span> Gift Cards
-        </button>
-        <button class="tab-opt" onclick="switchTab('ffTopup', this)">
-          <span class="tab-icon">⚡</span> Top Up Direto
-        </button>
-        <button class="tab-opt" onclick="switchTab('ffSubs', this)">
-          <span class="tab-icon">⭐</span> Assinaturas
-        </button>
-      </div>
-
-      <!-- GIFT CARDS -->
-      <div id="ffGift" class="products-grid">
-        <div class="product-card" onclick="openPay('100+10 Dimas','80','Free Fire')">
-          <span class="card-gem">💎</span>
-          <div class="card-name">100 Diamantes</div>
-          <div class="card-bonus">+ 10 bónus</div>
-          <div class="card-price">80 <small>MT</small></div>
-          <button class="btn-buy">Comprar</button>
-        </div>
-        <div class="product-card" onclick="openPay('210+21 Dimas','140','Free Fire')">
-          <span class="card-gem">💎</span>
-          <div class="card-name">210 Diamantes</div>
-          <div class="card-bonus">+ 21 bónus</div>
-          <div class="card-price">140 <small>MT</small></div>
-          <button class="btn-buy">Comprar</button>
-        </div>
-        <div class="product-card" onclick="openPay('530+53 Dimas','350','Free Fire')">
-          <span class="card-gem">💎</span>
-          <div class="card-name">530 Diamantes</div>
-          <div class="card-bonus">+ 53 bónus</div>
-          <div class="card-price">350 <small>MT</small></div>
-          <button class="btn-buy">Comprar</button>
-        </div>
-        <div class="product-card" onclick="openPay('1080+108 Dimas','650','Free Fire')">
-          <span class="card-gem">💎</span>
-          <div class="card-name">1080 Diamantes</div>
-          <div class="card-bonus">+ 108 bónus</div>
-          <div class="card-price">650 <small>MT</small></div>
-          <button class="btn-buy">Comprar</button>
-        </div>
-        <div class="product-card" onclick="openPay('2200+220 Dimas','1400','Free Fire')" style="border-color: rgba(255,193,7,0.4); position:relative;">
-          <div style="position:absolute;top:10px;right:10px;background:rgba(255,193,7,0.15);color:#ffc107;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;letter-spacing:0.5px;">POPULAR</div>
-          <span class="card-gem">💎</span>
-          <div class="card-name">2200 Diamantes</div>
-          <div class="card-bonus">+ 220 bónus</div>
-          <div class="card-price">1400 <small>MT</small></div>
-          <button class="btn-buy">Comprar</button>
-        </div>
-      </div>
-
-      <!-- TOP UP -->
-      <div id="ffTopup" class="hidden">
-        <div class="coming-soon">
-          <div class="cs-icon">⚡</div>
-          <div class="card-name" style="margin-bottom:6px;">Top Up Direto</div>
-          <p>Em breve — carregamento direto na conta sem Gift Card.</p>
-        </div>
-      </div>
-
-      <!-- ASSINATURAS -->
-      <div id="ffSubs" class="products-grid hidden">
-        <div class="product-card" onclick="openPay('Semanal','180','Free Fire')">
-          <span class="card-gem">⭐</span>
-          <div class="card-name">Semanal</div>
-          <div class="card-bonus">Passe de 7 dias</div>
-          <div class="card-price">180 <small>MT</small></div>
-          <button class="btn-buy">Comprar</button>
-        </div>
-        <div class="product-card" onclick="openPay('Mensal','790','Free Fire')">
-          <span class="card-gem">⭐</span>
-          <div class="card-name">Mensal</div>
-          <div class="card-bonus">Passe de 30 dias</div>
-          <div class="card-price">790 <small>MT</small></div>
-          <button class="btn-buy">Comprar</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- PERFIL SECTION -->
-    <div id="section-perfil" class="hidden">
-      <div class="hero" style="padding:24px 0 20px;">
-        <h2>Meu <em>Perfil</em></h2>
-      </div>
-      <div class="profile-card">
-        <div id="profileAvatar" class="profile-avatar-lg">U</div>
-        <div id="profileName" class="profile-name-lg">Carregando...</div>
-        <div id="profileEmail" class="profile-email-lg">—</div>
-      </div>
-      <div class="info-row">
-        <span>Status da Conta</span>
-        <span style="color:var(--green)">✔ Ativa</span>
-      </div>
-      <div class="info-row">
-        <span>Método Preferido</span>
-        <span>E-Mola</span>
-      </div>
-      <div style="margin-top:20px;">
-        <button class="btn" onclick="logout()" style="background:rgba(255,77,77,0.1);color:var(--red);border:1px solid rgba(255,77,77,0.3);border-radius:10px;">
-          Terminar Sessão
-        </button>
-      </div>
-    </div>
-
-    <!-- SUPORTE SECTION -->
-    <div id="section-suporte" class="hidden">
-      <div class="hero" style="padding:24px 0 20px;">
-        <h2>Suporte & <em>Contacto</em></h2>
-        <p>Respondemos em menos de 30 minutos</p>
-      </div>
-      <a href="https://wa.me/258840474014?text=Olá%20Yanikzx9!%20Preciso%20de%20ajuda." target="_blank" class="support-card">
-        <div class="support-icon green">💬</div>
-        <div class="support-info">
-          <strong>WhatsApp</strong>
-          <small>Chat direto — resposta rápida</small>
-        </div>
-        <div class="support-arrow">›</div>
-      </a>
-      <a href="https://wa.me/258840474014?text=Olá%20Yanikzx9!%20Preciso%20de%20ajuda." target="_blank" class="support-card">
-        <div class="support-icon green">📞</div>
-        <div class="support-info">
-          <strong>Ligar: 840 474 014</strong>
-          <small>Seg–Dom · 08h–22h</small>
-        </div>
-        <div class="support-arrow">›</div>
-      </a>
-      <div class="support-card" style="cursor:default; pointer-events:none;">
-        <div class="support-icon" style="background:rgba(255,193,7,0.1);">⏱</div>
-        <div class="support-info">
-          <strong>Tempo médio de resposta</strong>
-          <small style="color:var(--green);">Menos de 30 minutos</small>
-        </div>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- ===== BOTTOM NAV ===== -->
-  <nav class="bottom-nav">
-    <button class="nav-item nav-active" data-nav="section-loja" onclick="showSection('section-loja')">
-      <span class="nav-icon">🏪</span>
-      <span class="nav-label">Loja</span>
-    </button>
-    <button class="nav-item" data-nav="section-perfil" onclick="showSection('section-perfil')">
-      <span class="nav-icon">👤</span>
-      <span class="nav-label">Perfil</span>
-    </button>
-    <button class="nav-item" data-nav="section-suporte" onclick="showSection('section-suporte')">
-      <span class="nav-icon">💬</span>
-      <span class="nav-label">Suporte</span>
-    </button>
-  </nav>
-
-</div>
-
-</body>
-</html>
+console.log('🤖 Nano Bot - Site carregado com sucesso!');
+console.log('📱 WhatsApp: 258 834 788 141');
+console.log('💜 Criado por Yanik Uaite');
