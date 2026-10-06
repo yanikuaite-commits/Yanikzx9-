@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revelar Bot - Anúncio</title>
+  
+  <!-- Script Adsterra -->
+  <script data-cfasync="false" src="https://accountut.com/1/b85bb44d0a9239ec846542f0552fd956"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 30px;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header {
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .ad-container {
+      background: #f5f5f5;
+      border-radius: 15px;
+      padding: 30px;
+      margin: 30px 0;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .ad-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .ad-text {
+      font-size: 18px;
+      color: #333;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .timer-section {
+      margin: 30px 0;
+    }
+
+    .timer-label {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .timer {
+      font-size: 56px;
+      font-weight: bold;
+      color: #667eea;
+      margin: 15px 0;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 5px;
+    }
+
+    .status-message {
+      font-size: 14px;
+      color: #666;
+      margin: 20px 0;
+      min-height: 40px;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 16px 30px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .btn.success {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+    }
+
+    .success-section {
+      display: none;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .success-section.show {
+      display: block;
+    }
+
+    .code-box {
+      background: #f0f0f0;
+      border: 2px solid #667eea;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      word-break: break-all;
+      cursor: pointer;
+      user-select: all;
+      transition: all 0.2s ease;
+    }
+
+    .code-box:hover {
+      background: #e8e8e8;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .instructions {
+      background: #e8f4f8;
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      text-align: left;
+      font-size: 14px;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .footer {
+      font-size: 12px;
+      color: #999;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 25px 20px;
+        border-radius: 15px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .timer {
+        font-size: 48px;
+      }
+
+      .btn {
+        padding: 14px 25px;
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>📺 Anúncio</h1>
+      <p>Assista um anúncio rápido para continuar</p>
+    </div>
+
+    <!-- Ad Container -->
+    <div class="ad-container">
+      <div class="ad-icon">🎯</div>
+      <div class="ad-text">
+        Carregando anúncio...<br>
+        <strong>Por favor aguarde</strong>
+      </div>
+    </div>
+
+    <!-- Timer Section -->
+    <div class="timer-section">
+      <div class="timer-label">Assistindo anúncio em:</div>
+      <div class="timer" id="timer">30</div>
+      <div class="status-message" id="statusMessage">
+        Anúncio em exibição...
+      </div>
+    </div>
+
+    <!-- Button -->
+    <button class="btn" id="btn" disabled>
+      ⏳ Aguarde... (30s)
+    </button>
+
+    <!-- Success Section -->
+    <div class="success-section" id="successSection">
+      <div class="instructions">
+        <strong>✅ Parabéns!</strong><br>
+        Anúncio assistido com sucesso!<br><br>
+        Copie o código abaixo e volte ao WhatsApp:
+      </div>
+
+      <div class="code-box" id="codeBox">
+        Gerando código...
+      </div>
+
+      <button class="btn success" id="copyBtn">
+        ✅ Copiar Código
+      </button>
+
+      <div class="instructions">
+        <strong>Próximo passo:</strong><br>
+        1. Cole o código no WhatsApp<br>
+        2. Digite: <code>/validar SEU-CÓDIGO</code><br>
+        3. Pronto! Acesso liberado
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Powered by Revelar Bot 🚀</p>
+    </div>
+  </div>
+
+  <script>
+    // Pegar parâmetros da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    const timerEl = document.getElementById("timer");
+    const btn = document.getElementById("btn");
+    const successSection = document.getElementById("successSection");
+    const codeBox = document.getElementById("codeBox");
+    const copyBtn = document.getElementById("copyBtn");
+    const statusMessage = document.getElementById("statusMessage");
+
+    // Gerar código se tiver token
+    if (token) {
+      let seconds = 30;
+      
+      const interval = setInterval(() => {
+        seconds--;
+        timerEl.textContent = seconds;
+        btn.textContent = `⏳ Aguarde... (${seconds}s)`;
+
+        // Atualizar mensagem
+        if (seconds === 0) {
+          statusMessage.textContent = "✅ Anúncio concluído!";
+        }
+
+        // Quando timer chega a 0
+        if (seconds <= 0) {
+          clearInterval(interval);
+          btn.disabled = false;
+          btn.textContent = "✅ Gerar Código de Acesso";
+          btn.style.cursor = "pointer";
+
+          // Ação do botão
+          btn.onclick = () => {
+            // Mostrar código
+            codeBox.textContent = token;
+            successSection.classList.add("show");
+            btn.style.display = "none";
+            timerEl.textContent = "✅";
+
+            // Copiar automaticamente
+            navigator.clipboard.writeText(`/validar ${token}`).catch(err => {
+              console.error("Erro ao copiar:", err);
+            });
+          };
+        }
+      }, 1000);
+
+      // Ação do botão Copiar
+      copyBtn.onclick = () => {
+        const textToCopy = `/validar ${token}`;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          copyBtn.textContent = "✅ Copiado!";
+          copyBtn.disabled = true;
+          
+          // Resetar após 2 segundos
+          setTimeout(() => {
+            copyBtn.textContent = "📋 Copiar Código";
+            copyBtn.disabled = false;
+          }, 2000);
+        }).catch(err => {
+          console.error("Erro ao copiar:", err);
+        });
+      };
+    } else {
+      // Sem token, rodar só anúncio
+      let seconds = 30;
+      
+      const interval = setInterval(() => {
+        seconds--;
+        timerEl.textContent = seconds;
+        btn.textContent = `⏳ Anúncio em exibição... (${seconds}s)`;
+
+        if (seconds <= 0) {
+          clearInterval(interval);
+          btn.disabled = false;
+          btn.textContent = "✅ Anúncio Concluído";
+          statusMessage.textContent = "✅ Obrigado por assistir!";
+          timerEl.textContent = "✅";
+        }
+      }, 1000);
+    }
+
+    // Analytics simples
+    console.log("📺 Página de anúncio Adsterra carregada");
+  </script>
+</body>
+</html>
